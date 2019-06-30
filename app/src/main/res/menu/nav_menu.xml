@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:title="Main Menu">
+        <menu
+        >
+            <item android:title="first_first" android:id="@+id/action_first"
+                  android:icon="@drawable/ic_call_made_black_24dp"/>
+            <item android:title="first_second" android:id="@+id/action_second"/>
+            <item
+                    android:id="@+id/app_bar_switch"
+                    android:title="Switch"
+                    app:showAsAction="always"
+                    app:actionLayout="@layout/switch_item"/>
+        </menu>
+    </item>
+    <item android:title="Second Menu">
+        <menu
+        >
+            <item android:title="second_first" android:id="@+id/action_third"/>
+        </menu>
+    </item>
+</menu>
