@@ -21,5 +21,6 @@ interface NytimesServiceInterface {
     @GET()
     fun getPopularSeries(@Url url:String): Call<GetPopularSeries>
 
-
+    @GET()
+    fun getTopRatedSeries(@Url url:String): Call<GetTopRatedSeries>
 }

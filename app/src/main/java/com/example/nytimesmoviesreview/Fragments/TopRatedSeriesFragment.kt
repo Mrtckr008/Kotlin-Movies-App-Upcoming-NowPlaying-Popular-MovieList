@@ -7,29 +7,33 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.nytimesmoviesreview.R
-import com.example.nytimesmoviesreview.adapter.MoviesAdapterGetUpcoming
-import com.example.nytimesmoviesreview.model.MovieGetTrendModel
-import kotlinx.android.synthetic.main.trend_movies_series_fragment.*
+import com.example.nytimesmoviesreview.adapter.MoviesAdapterGetPopular
+import com.example.nytimesmoviesreview.adapter.SeriesAdapterGetTopRatedSeries
+import com.example.nytimesmoviesreview.model.MovieGetPopularModel
+import com.example.nytimesmoviesreview.model.SeriesGetTopRatedModel
+import kotlinx.android.synthetic.main.main_fragment.*
+import kotlinx.android.synthetic.main.now_playing_fragment.*
 
-class TrendMoviesAndSeriesFragment:Fragment() {
+class TopRatedSeriesFragment :Fragment(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         retainInstance=true
 
     }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =inflater.inflate(
-        R.layout.trend_movies_series_fragment,container,false)
+        R.layout.now_playing_fragment,container,false)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-            thirdFragmentsRecyclerView.apply {
+
+        detailFragmentsRecyclerView.apply {
                 layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
-                adapter = MoviesAdapterGetUpcoming(MovieGetTrendModel.getResponse()!!.toList())
+                adapter = SeriesAdapterGetTopRatedSeries(SeriesGetTopRatedModel.getResponse()!!.toList())
             }
 
     }
     companion object{
-        fun newInstance(): TrendMoviesAndSeriesFragment =
-            TrendMoviesAndSeriesFragment()
+        fun newInstance(): TopRatedSeriesFragment = TopRatedSeriesFragment()
+
     }
 
 }

@@ -12,7 +12,7 @@ import com.example.nytimesmoviesreview.adapter.MoviesAdapter
 import com.example.nytimesmoviesreview.model.MovieNowPlayingModel
 import kotlinx.android.synthetic.main.main_fragment.*
 
-class MainFragment : Fragment() {
+class NowPlayingMoviesFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,8 +30,8 @@ class MainFragment : Fragment() {
         }
     }
 companion object{
-    fun newInstance(): MainFragment =
-        MainFragment()
+    fun newInstance(): NowPlayingMoviesFragment =
+        NowPlayingMoviesFragment()
 
 }
 

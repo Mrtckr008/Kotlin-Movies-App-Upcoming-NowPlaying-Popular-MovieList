@@ -10,32 +10,34 @@ import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.example.nytimesmoviesreview.R
+import com.example.nytimesmoviesreview.dto.ResultGetTopRatedSeries
 import com.example.nytimesmoviesreview.dto.ResultPopularSeries
 
 
 
-class MoviesAdapterGetPopularSeries(moviesList:List<ResultPopularSeries>):RecyclerView.Adapter<SeriesViewHolderGetUpcoming>() {
+class SeriesAdapterGetTopRatedSeries(moviesList:List<ResultGetTopRatedSeries>):RecyclerView.Adapter<SeriesViewHolderGetTopRated>() {
 
     var moviesList=moviesList
     private val layoutManager: LinearLayoutManager? = null
-    override fun onCreateViewHolder(parent: ViewGroup, ViewType: Int): SeriesViewHolderGetUpcoming {
-        return SeriesViewHolderGetUpcoming(parent)
+    override fun onCreateViewHolder(parent: ViewGroup, ViewType: Int): SeriesViewHolderGetTopRated {
+        return SeriesViewHolderGetTopRated(parent)
     }
 
-    override fun onBindViewHolder(holder: SeriesViewHolderGetUpcoming, position: Int) {
+    override fun onBindViewHolder(holder: SeriesViewHolderGetTopRated, position: Int) {
         holder.bindTo(moviesList[position])
     }
 
     override fun getItemCount(): Int {
         return moviesList.size
      }
-    fun setMovieList(moviesList: List<ResultPopularSeries>){
+    fun setMovieList(moviesList: List<ResultGetTopRatedSeries>){
         this.moviesList=moviesList
     }
+
 }
 
 
-class SeriesViewHolderGetUpcoming(viewGroup: ViewGroup):RecyclerView.ViewHolder
+class SeriesViewHolderGetTopRated(viewGroup: ViewGroup):RecyclerView.ViewHolder
     (LayoutInflater.from(viewGroup.context).inflate(R.layout.movies_item_list,viewGroup,false)){
     private val txtDisplayTitle by lazy { itemView.findViewById<TextView>(R.id.txtDisplayTitle)}
     private val txtHeadline by lazy {itemView.findViewById<TextView>(R.id.txtHeadline)}
@@ -43,7 +45,7 @@ class SeriesViewHolderGetUpcoming(viewGroup: ViewGroup):RecyclerView.ViewHolder
     private val imgViewImageUrl by lazy { itemView.findViewById<ImageView>(R.id.imgViewImageUrl) }
 
 
-    fun bindTo(MoviesDto: ResultPopularSeries) {
+    fun bindTo(MoviesDto: ResultGetTopRatedSeries) {
 
         txtDisplayTitle.text = MoviesDto.name
         txtHeadline.text = "Popularity Point: "+MoviesDto.popularity.toString()

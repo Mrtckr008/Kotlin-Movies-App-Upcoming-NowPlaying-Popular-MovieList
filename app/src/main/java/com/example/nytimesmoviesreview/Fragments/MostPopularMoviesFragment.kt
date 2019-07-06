@@ -11,7 +11,7 @@ import com.example.nytimesmoviesreview.adapter.MoviesAdapterGetPopular
 import com.example.nytimesmoviesreview.model.MovieGetPopularModel
 import kotlinx.android.synthetic.main.now_playing_fragment.*
 
-class PopularMoviesFragment :Fragment(){
+class MostPopularMoviesFragment :Fragment(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         retainInstance=true
@@ -29,8 +29,8 @@ class PopularMoviesFragment :Fragment(){
 
     }
     companion object{
-        fun newInstance(): PopularMoviesFragment =
-            PopularMoviesFragment()
+        fun newInstance(): MostPopularMoviesFragment =
+            MostPopularMoviesFragment()
 
     }
 

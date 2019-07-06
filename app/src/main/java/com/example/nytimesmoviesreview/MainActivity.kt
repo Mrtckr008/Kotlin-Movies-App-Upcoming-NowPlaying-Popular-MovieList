@@ -17,12 +17,11 @@ import android.view.*
 import com.example.nytimesmoviesreview.adapter.ViewPagerAdapter
 import android.view.View.GONE
 import android.view.LayoutInflater
-import com.example.nytimesmoviesreview.Fragments.MainFragment
-import com.example.nytimesmoviesreview.Fragments.PopularMoviesFragment
-import com.example.nytimesmoviesreview.Fragments.TrendMoviesAndSeriesFragment
+import com.example.nytimesmoviesreview.Fragments.*
 import com.example.nytimesmoviesreview.dto.GetPopularSeries
 import com.example.nytimesmoviesreview.model.SeriesGetPopularModel
-import com.example.nytimesmoviesreview.Fragments.MostPopularSeriesFragment
+import com.example.nytimesmoviesreview.dto.GetTopRatedSeries
+import com.example.nytimesmoviesreview.model.SeriesGetTopRatedModel
 import com.example.nytimesmoviesreview.network.NytimesServiceInterface
 import com.example.nytimesmoviesreview.network.RetrofitClient
 import retrofit2.Call
@@ -45,8 +44,8 @@ class MainActivity : AppCompatActivity(),NavigationView.OnNavigationItemSelected
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.drawer_layout)
-
-        fragment = MainFragment()
+        CallSeriesApis()
+        fragment = NowPlayingMoviesFragment()
 
         setSupportActionBar(toolbar)
         nav_view = findViewById(R.id.nav_view)
@@ -78,39 +77,6 @@ class MainActivity : AppCompatActivity(),NavigationView.OnNavigationItemSelected
         val childLayout = layoutInflater.inflate(R.layout.template_layout,findViewById(R.id.templateImage))
 
 
-
-
-
-
-        /*     val fragmentAdapter=MyPagerFragmentAdapter(supportFragmentManager)
-        viewpager_main.adapter=fragmentAdapter          Tab Layout oluşturmak için
-        tabLayout.setupWithViewPager(viewpager_main)*/
-
-//        val menu = nav_view?.getMenu()
-//        for (i in 1..2) {
-//            menu?.add(Menu.NONE, i, Menu.NONE, "Runtime item $i")        //Ana başlık eklemek için
-//        }
-
-//        val subMenu = menu?.addSubMenu("Runtime 1")
-        //      for (i in 1..2) {                   //Ana başlıktan alt başlığa gitmek için
-        //        subMenu?.
-        //     }
-
-      //  supportFragmentManager.beginTransaction().replace(R.id.fragment_frame, fragment!!).commit()// frame layouta fragmentları yüklüyor.
-
-if(SeriesGetPopularModel.getResponse()==null){
-        val service= RetrofitClient.getClient().create(NytimesServiceInterface::class.java)
-        val callPopularSeries=service.getPopularSeries("tv/popular?api_key=ac3cbd07a68825e9716c144bd088350f&language=en-US&page=1")
-
-        callPopularSeries.enqueue(object : Callback<GetPopularSeries> {
-            override fun onResponse(call: Call<GetPopularSeries>?, response: Response<GetPopularSeries>?) {
-                val movieList=ArrayList(response!!.body().results)
-                SeriesGetPopularModel.setResponse(movieList)
-            }
-            override fun onFailure(call: Call<GetPopularSeries>?, t: Throwable?) {
-            }
-        })
-}
     }
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         var id: Int = item.itemId
@@ -125,15 +91,13 @@ if(SeriesGetPopularModel.getResponse()==null){
             changeFragment(MostPopularSeriesFragment())
          //   tabLayout?.setVisibility(GONE)
          //   viewPager?.setVisibility(GONE)
-
         }
         if (item.itemId == 1) {
-            changeFragment(PopularMoviesFragment())
+            changeFragment(MostPopularMoviesFragment())
             tabLayout?.setVisibility(GONE)
         } else {
 
         }
-
         return true
     }
 
@@ -144,39 +108,49 @@ if(SeriesGetPopularModel.getResponse()==null){
 
     private fun setupViewMainPager(viewPager: ViewPager) {
         val adapter = ViewPagerAdapter(supportFragmentManager)
-        adapter.addFragment(MainFragment(), "Now Playing Movies")
-        adapter.addFragment(PopularMoviesFragment(), "Most Popular Movies")
+        adapter.addFragment(NowPlayingMoviesFragment(), "Now Playing Movies")
+        adapter.addFragment(MostPopularMoviesFragment(), "Most Popular Movies")
         adapter.addFragment(TrendMoviesAndSeriesFragment(), "Trend Movies&Series")
         viewPager.adapter = adapter
     }
 
     private fun setupViewSeriesPager(viewPager: ViewPager) {
         val adapter = ViewPagerAdapter(supportFragmentManager)
-        adapter.addFragment(MainFragment(), "Most Popular Series")
-        adapter.addFragment(PopularMoviesFragment(), "Something of Series")
-        adapter.addFragment(TrendMoviesAndSeriesFragment(), "Something of Series")
+        adapter.addFragment(NowPlayingMoviesFragment(), "Most Popular Series")
+        adapter.addFragment(MostPopularMoviesFragment(), "Top Rated Series")
         viewPager.adapter = adapter
     }
 
-
-
     fun changeFragment(fragment: Fragment) {
         val fragmentTransaction = supportFragmentManager.beginTransaction()
-        fragmentTransaction.replace(R.id.main_fragment_view,
-            MostPopularSeriesFragment()
-        )
-        fragmentTransaction.replace(R.id.detail_fragment_linearlayout,
-            MostPopularSeriesFragment()
-        )
 
+        fragmentTransaction.replace(R.id.main_fragment_view, MostPopularSeriesFragment())
+        fragmentTransaction.addToBackStack(null)
+
+        setupViewSeriesPager(viewPager!!)
+
+        fragmentTransaction.replace(R.id.detail_fragment_linearlayout, TopRatedSeriesFragment())
         fragmentTransaction.addToBackStack(null)
         fragmentTransaction.commit()
         setupViewSeriesPager(viewPager!!)
+    }
 
 
-   //     supportFragmentManager.beginTransaction()
-   //         .add(android.R.id.content, MostPopularSeriesFragment())
-   //         .commit()
+    fun CallSeriesApis(){
+        if(SeriesGetPopularModel.getResponse()==null){
+            val service= RetrofitClient.getClient().create(NytimesServiceInterface::class.java)
+            val callPopularSeries=service.getPopularSeries("tv/popular?api_key=ac3cbd07a68825e9716c144bd088350f&language=en-US&page=1")
+
+            callPopularSeries.enqueue(object : Callback<GetPopularSeries> {
+                override fun onResponse(call: Call<GetPopularSeries>?, response: Response<GetPopularSeries>?) {
+                    val movieList=ArrayList(response!!.body().results)
+                    SeriesGetPopularModel.setResponse(movieList)
+                }
+                override fun onFailure(call: Call<GetPopularSeries>?, t: Throwable?) {
+                }
+            })
+        }
+
     }
 }
 
