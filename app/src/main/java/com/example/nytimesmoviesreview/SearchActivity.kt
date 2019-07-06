@@ -5,11 +5,14 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import com.example.nytimesmoviesreview.dto.GetPopularMovies
-import com.example.nytimesmoviesreview.dto.MovieGetUpcoming
-import com.example.nytimesmoviesreview.dto.MovieNowPlaying
+import com.example.nytimesmoviesreview.dto.GetMovieGetUpcoming
+import com.example.nytimesmoviesreview.dto.GetMovieNowPlaying
+import com.example.nytimesmoviesreview.dto.GetTrendMoviesAndSeries
 import com.example.nytimesmoviesreview.model.MovieGetPopularModel
+import com.example.nytimesmoviesreview.model.MovieGetTrendModel
 import com.example.nytimesmoviesreview.model.MovieGetUpcomingModel
 import com.example.nytimesmoviesreview.model.MovieNowPlayingModel
+import com.example.nytimesmoviesreview.network.NytimesServiceInterface
 import com.example.nytimesmoviesreview.network.RetrofitClient
 import retrofit2.Call
 import retrofit2.Callback
@@ -25,17 +28,18 @@ class SearchActivity : AppCompatActivity() {
         val callNowPlayingMovies=service.getNowPlayingMovies("movie/now_playing?api_key=ac3cbd07a68825e9716c144bd088350f")
         val callGetPopularMovies=service.getPopularMovies("movie/popular?api_key=ac3cbd07a68825e9716c144bd088350f&language=en-US&page=1")
         val callGetUpcomingMovies=service.getUpcomingMovies("movie/upcoming?api_key=ac3cbd07a68825e9716c144bd088350f&language=en-US&page=1")
+        val callTrendMoviesAndSeries=service.getTrendMoviesAndSeries("trending/all/day?api_key=ac3cbd07a68825e9716c144bd088350f")
 
 
 
-        callNowPlayingMovies.enqueue(object : Callback<MovieNowPlaying> {
-            override fun onResponse(call: Call<MovieNowPlaying>?, response: Response<MovieNowPlaying>?) {
+        callNowPlayingMovies.enqueue(object : Callback<GetMovieNowPlaying> {
+            override fun onResponse(call: Call<GetMovieNowPlaying>?, response: Response<GetMovieNowPlaying>?) {
                 val movieList=ArrayList(response!!.body().results)
                 MovieNowPlayingModel.setResponse(movieList)
 
             }
 
-            override fun onFailure(call: Call<MovieNowPlaying>?, t: Throwable?) {
+            override fun onFailure(call: Call<GetMovieNowPlaying>?, t: Throwable?) {
             }
         })
 
@@ -50,17 +54,28 @@ class SearchActivity : AppCompatActivity() {
             }
         })
 
-        callGetUpcomingMovies.enqueue(object : Callback<MovieGetUpcoming> {
-            override fun onResponse(call: Call<MovieGetUpcoming>?, response: Response<MovieGetUpcoming>?) {
+        callGetUpcomingMovies.enqueue(object : Callback<GetMovieGetUpcoming> {
+            override fun onResponse(call: Call<GetMovieGetUpcoming>?, response: Response<GetMovieGetUpcoming>?) {
                 val movieList=ArrayList(response!!.body().results)
                 MovieGetUpcomingModel.setResponse(movieList)
 
             }
 
-            override fun onFailure(call: Call<MovieGetUpcoming>?, t: Throwable?) {
+            override fun onFailure(call: Call<GetMovieGetUpcoming>?, t: Throwable?) {
             }
         })
 
+
+        callTrendMoviesAndSeries.enqueue(object : Callback<GetTrendMoviesAndSeries> {
+            override fun onResponse(call: Call<GetTrendMoviesAndSeries>?, response: Response<GetTrendMoviesAndSeries>?) {
+                val movieList=ArrayList(response!!.body().results)
+                MovieGetTrendModel.setResponse(movieList)
+
+            }
+
+            override fun onFailure(call: Call<GetTrendMoviesAndSeries>?, t: Throwable?) {
+            }
+        })
 
 
 

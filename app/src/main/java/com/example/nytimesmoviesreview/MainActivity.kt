@@ -13,13 +13,21 @@ import android.support.v4.view.ViewPager
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.widget.Toolbar
-import android.util.Log
 import android.view.*
 import com.example.nytimesmoviesreview.adapter.ViewPagerAdapter
-import retrofit2.Response
 import android.view.View.GONE
 import android.view.LayoutInflater
-import com.example.nytimesmoviesreview.model.MovieNowPlayingModel
+import com.example.nytimesmoviesreview.Fragments.MainFragment
+import com.example.nytimesmoviesreview.Fragments.PopularMoviesFragment
+import com.example.nytimesmoviesreview.Fragments.TrendMoviesAndSeriesFragment
+import com.example.nytimesmoviesreview.dto.GetPopularSeries
+import com.example.nytimesmoviesreview.model.SeriesGetPopularModel
+import com.example.nytimesmoviesreview.Fragments.MostPopularSeriesFragment
+import com.example.nytimesmoviesreview.network.NytimesServiceInterface
+import com.example.nytimesmoviesreview.network.RetrofitClient
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 class MainActivity : AppCompatActivity(),NavigationView.OnNavigationItemSelectedListener {
@@ -55,7 +63,7 @@ class MainActivity : AppCompatActivity(),NavigationView.OnNavigationItemSelected
         mFragmentTransaction = mFragmentManager.beginTransaction()
 
         viewPager = findViewById(R.id.viewpager_main) as ViewPager
-        setupViewPager(viewPager!!)
+        setupViewMainPager(viewPager!!)
 
         tabLayout = findViewById(R.id.tabLayout) as TabLayout
         tabLayout!!.setupWithViewPager(viewPager)
@@ -78,10 +86,10 @@ class MainActivity : AppCompatActivity(),NavigationView.OnNavigationItemSelected
         viewpager_main.adapter=fragmentAdapter          Tab Layout oluşturmak için
         tabLayout.setupWithViewPager(viewpager_main)*/
 
-        val menu = nav_view?.getMenu()
-        for (i in 1..2) {
-            menu?.add(Menu.NONE, i, Menu.NONE, "Runtime item $i")        //Ana başlık eklemek için
-        }
+//        val menu = nav_view?.getMenu()
+//        for (i in 1..2) {
+//            menu?.add(Menu.NONE, i, Menu.NONE, "Runtime item $i")        //Ana başlık eklemek için
+//        }
 
 //        val subMenu = menu?.addSubMenu("Runtime 1")
         //      for (i in 1..2) {                   //Ana başlıktan alt başlığa gitmek için
@@ -90,20 +98,37 @@ class MainActivity : AppCompatActivity(),NavigationView.OnNavigationItemSelected
 
       //  supportFragmentManager.beginTransaction().replace(R.id.fragment_frame, fragment!!).commit()// frame layouta fragmentları yüklüyor.
 
+if(SeriesGetPopularModel.getResponse()==null){
+        val service= RetrofitClient.getClient().create(NytimesServiceInterface::class.java)
+        val callPopularSeries=service.getPopularSeries("tv/popular?api_key=ac3cbd07a68825e9716c144bd088350f&language=en-US&page=1")
+
+        callPopularSeries.enqueue(object : Callback<GetPopularSeries> {
+            override fun onResponse(call: Call<GetPopularSeries>?, response: Response<GetPopularSeries>?) {
+                val movieList=ArrayList(response!!.body().results)
+                SeriesGetPopularModel.setResponse(movieList)
+            }
+            override fun onFailure(call: Call<GetPopularSeries>?, t: Throwable?) {
+            }
+        })
+}
     }
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         var id: Int = item.itemId
-        if (id == R.id.action_first) run {
+        if (id == R.id.movie_lists) run {
             drawer?.closeDrawers()          //seçildiğinde menünün kapanması için
-            val intent = Intent(this, GlobalScreenActivity::class.java)
+            val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
+            finish()
         }
-        if (id == R.id.action_second) {
-            changeFragment(DetailFragment())
-            tabLayout?.setVisibility(GONE)
+        if (id == R.id.series_lists) {
+            drawer?.closeDrawers()
+            changeFragment(MostPopularSeriesFragment())
+         //   tabLayout?.setVisibility(GONE)
+         //   viewPager?.setVisibility(GONE)
+
         }
         if (item.itemId == 1) {
-            changeFragment(DetailFragment())
+            changeFragment(PopularMoviesFragment())
             tabLayout?.setVisibility(GONE)
         } else {
 
@@ -117,19 +142,41 @@ class MainActivity : AppCompatActivity(),NavigationView.OnNavigationItemSelected
 
     }
 
-    private fun setupViewPager(viewPager: ViewPager) {
+    private fun setupViewMainPager(viewPager: ViewPager) {
         val adapter = ViewPagerAdapter(supportFragmentManager)
         adapter.addFragment(MainFragment(), "Now Playing Movies")
-            adapter.addFragment(DetailFragment(), "Most Popular Movies")
-            adapter.addFragment(ThirdFragment(), "Upcoming Movies")
+        adapter.addFragment(PopularMoviesFragment(), "Most Popular Movies")
+        adapter.addFragment(TrendMoviesAndSeriesFragment(), "Trend Movies&Series")
         viewPager.adapter = adapter
     }
 
+    private fun setupViewSeriesPager(viewPager: ViewPager) {
+        val adapter = ViewPagerAdapter(supportFragmentManager)
+        adapter.addFragment(MainFragment(), "Most Popular Series")
+        adapter.addFragment(PopularMoviesFragment(), "Something of Series")
+        adapter.addFragment(TrendMoviesAndSeriesFragment(), "Something of Series")
+        viewPager.adapter = adapter
+    }
+
+
+
     fun changeFragment(fragment: Fragment) {
         val fragmentTransaction = supportFragmentManager.beginTransaction()
-        fragmentTransaction.replace(R.id.fragment_frame, fragment)
-        fragmentTransaction.commit()
+        fragmentTransaction.replace(R.id.main_fragment_view,
+            MostPopularSeriesFragment()
+        )
+        fragmentTransaction.replace(R.id.detail_fragment_linearlayout,
+            MostPopularSeriesFragment()
+        )
 
+        fragmentTransaction.addToBackStack(null)
+        fragmentTransaction.commit()
+        setupViewSeriesPager(viewPager!!)
+
+
+   //     supportFragmentManager.beginTransaction()
+   //         .add(android.R.id.content, MostPopularSeriesFragment())
+   //         .commit()
     }
 }
 

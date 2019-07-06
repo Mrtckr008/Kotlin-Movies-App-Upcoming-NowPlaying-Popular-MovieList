@@ -3,9 +3,8 @@ package com.example.nytimesmoviesreview.adapter
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
-import com.example.nytimesmoviesreview.DetailFragment
-import com.example.nytimesmoviesreview.MainFragment
-import com.example.nytimesmoviesreview.ThirdFragment
+import com.example.nytimesmoviesreview.Fragments.PopularMoviesFragment
+import com.example.nytimesmoviesreview.Fragments.MainFragment
 
 class MyPagerFragmentAdapter(fm:FragmentManager):FragmentPagerAdapter(fm) {
     override fun getCount(): Int {
@@ -18,7 +17,7 @@ class MyPagerFragmentAdapter(fm:FragmentManager):FragmentPagerAdapter(fm) {
                 MainFragment()
             }
             else ->{
-                DetailFragment()
+                PopularMoviesFragment()
             }
         }
     }

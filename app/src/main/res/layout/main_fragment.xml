@@ -4,18 +4,17 @@
                                              xmlns:app="http://schemas.android.com/apk/res-auto"
                                              android:layout_width="match_parent"
                                              android:layout_height="match_parent"
-                                             android:id="@+id/main_fragment_view">
+                                             android:id="@+id/main_fragment_view"
+                                             android:background="@android:color/white">
 
 
     <android.support.v7.widget.RecyclerView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-
             android:id="@+id/menuRecyclerView"
-            app:layout_constraintTop_toTopOf="@+id/viewpager_main"
-
             app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent"
-    />
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintTop_toTopOf="parent"/>
 
 </android.support.constraint.ConstraintLayout>
 

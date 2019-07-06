@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 
 
 
-class MovieGetUpcoming{
+class GetMovieGetUpcoming{
 
     @SerializedName("results")
     @Expose

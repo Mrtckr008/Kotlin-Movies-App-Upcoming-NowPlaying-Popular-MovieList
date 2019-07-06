@@ -1,4 +1,4 @@
-package com.example.nytimesmoviesreview
+package com.example.nytimesmoviesreview.Fragments
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.nytimesmoviesreview.R
 
 import com.example.nytimesmoviesreview.adapter.MoviesAdapter
 import com.example.nytimesmoviesreview.model.MovieNowPlayingModel
@@ -18,7 +19,8 @@ class MainFragment : Fragment() {
         retainInstance=true
 
     }
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =inflater.inflate(R.layout.main_fragment,container,false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =inflater.inflate(
+        R.layout.main_fragment,container,false)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         menuRecyclerView.apply {
@@ -28,7 +30,8 @@ class MainFragment : Fragment() {
         }
     }
 companion object{
-    fun newInstance():MainFragment= MainFragment()
+    fun newInstance(): MainFragment =
+        MainFragment()
 
 }
 

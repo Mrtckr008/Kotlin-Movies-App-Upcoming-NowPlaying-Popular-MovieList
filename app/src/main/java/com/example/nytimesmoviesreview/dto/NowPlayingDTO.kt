@@ -51,7 +51,7 @@ class Result {
 
 }
 
-class MovieNowPlaying {
+class GetMovieNowPlaying {
 
     @SerializedName("results")
     @Expose
