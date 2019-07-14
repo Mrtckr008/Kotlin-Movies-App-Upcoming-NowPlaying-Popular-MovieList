@@ -51,7 +51,11 @@ class MoviesViewHolder(viewGroup: ViewGroup):RecyclerView.ViewHolder
         Glide.with(itemView.context).load("https://image.tmdb.org/t/p/original/"+MoviesDto.posterPath)
             .thumbnail(Glide.with(itemView.context).load(R.drawable.abc_ic_go_search_api_material))
             .transition(DrawableTransitionOptions.withCrossFade()).into(imgViewImageUrl)
+itemView.setOnClickListener{
 
+
+
+}
     }
 
 

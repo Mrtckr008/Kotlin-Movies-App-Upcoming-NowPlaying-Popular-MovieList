@@ -1,4 +1,4 @@
-package com.example.nytimesmoviesreview.Fragments
+package com.example.nytimesmoviesreview.fragments
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -7,11 +7,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.nytimesmoviesreview.R
-import com.example.nytimesmoviesreview.adapter.MoviesAdapterGetPopular
-import com.example.nytimesmoviesreview.model.MovieGetPopularModel
+import com.example.nytimesmoviesreview.adapter.SeriesAdapterGetTopRatedSeries
+import com.example.nytimesmoviesreview.model.SeriesGetTopRatedModel
 import kotlinx.android.synthetic.main.now_playing_fragment.*
 
-class MostPopularMoviesFragment :Fragment(){
+class TopRatedSeriesFragment :Fragment(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         retainInstance=true
@@ -24,13 +24,12 @@ class MostPopularMoviesFragment :Fragment(){
 
         detailFragmentsRecyclerView.apply {
                 layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
-                adapter = MoviesAdapterGetPopular(MovieGetPopularModel.getResponse()!!.toList())
+                adapter = SeriesAdapterGetTopRatedSeries(SeriesGetTopRatedModel.getResponse()!!.toList())
             }
 
     }
     companion object{
-        fun newInstance(): MostPopularMoviesFragment =
-            MostPopularMoviesFragment()
+        fun newInstance(): TopRatedSeriesFragment = TopRatedSeriesFragment()
 
     }
 

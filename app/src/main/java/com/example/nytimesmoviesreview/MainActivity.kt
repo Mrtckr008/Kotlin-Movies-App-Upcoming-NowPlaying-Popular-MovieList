@@ -17,7 +17,7 @@ import android.view.*
 import com.example.nytimesmoviesreview.adapter.ViewPagerAdapter
 import android.view.View.GONE
 import android.view.LayoutInflater
-import com.example.nytimesmoviesreview.Fragments.*
+import com.example.nytimesmoviesreview.fragments.*
 import com.example.nytimesmoviesreview.dto.GetPopularSeries
 import com.example.nytimesmoviesreview.model.SeriesGetPopularModel
 import com.example.nytimesmoviesreview.dto.GetTopRatedSeries
@@ -27,10 +27,16 @@ import com.example.nytimesmoviesreview.network.RetrofitClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import android.app.Activity
+import android.app.PendingIntent.getActivity
+import android.view.WindowManager
+import android.widget.EditText
+import android.support.v4.content.ContextCompat.getSystemService
+import android.view.inputmethod.InputMethodManager
 
 
 class MainActivity : AppCompatActivity(),NavigationView.OnNavigationItemSelectedListener {
-    private final var MENU_ITEM_ITEM1: Int = 1
+
     private var tabLayout: TabLayout? = null
     var viewPager: ViewPager? = null
     private var nav_view: NavigationView? = null
@@ -47,11 +53,13 @@ class MainActivity : AppCompatActivity(),NavigationView.OnNavigationItemSelected
         CallSeriesApis()
         fragment = NowPlayingMoviesFragment()
 
+
         setSupportActionBar(toolbar)
         nav_view = findViewById(R.id.nav_view)
         toolbar = findViewById(R.id.toolbar_include)
         drawer = findViewById(R.id.drawer)
         setSupportActionBar(toolbar)
+
 
         var toggle = ActionBarDrawerToggle(this, drawer, toolbar, 0, 0)
         drawer?.addDrawerListener(toggle)
@@ -73,11 +81,16 @@ class MainActivity : AppCompatActivity(),NavigationView.OnNavigationItemSelected
     //    val mainLayout:ConstraintLayout=findViewById(R.id.constraintLayout)
         val mainFragment: Fragment? = getSupportFragmentManager().findFragmentById(R.id.main_fragment_view)
         val layoutInflater = this.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-
         val childLayout = layoutInflater.inflate(R.layout.template_layout,findViewById(R.id.templateImage))
-
-
     }
+    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
+        if (currentFocus != null) {
+            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(currentFocus!!.windowToken, 0)
+        }
+        return super.dispatchTouchEvent(ev)
+    }
+
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         var id: Int = item.itemId
         if (id == R.id.movie_lists) run {
@@ -135,7 +148,6 @@ class MainActivity : AppCompatActivity(),NavigationView.OnNavigationItemSelected
         setupViewSeriesPager(viewPager!!)
     }
 
-
     fun CallSeriesApis(){
         if(SeriesGetPopularModel.getResponse()==null){
             val service= RetrofitClient.getClient().create(NytimesServiceInterface::class.java)
@@ -151,7 +163,23 @@ class MainActivity : AppCompatActivity(),NavigationView.OnNavigationItemSelected
             })
         }
 
+        if(SeriesGetTopRatedModel.getResponse()==null){
+            val service= RetrofitClient.getClient().create(NytimesServiceInterface::class.java)
+            val callGetRatedSeries=service.getTopRatedSeries("tv/top_rated?api_key=ac3cbd07a68825e9716c144bd088350f&language=en-US&page=1")
+
+            callGetRatedSeries.enqueue(object : Callback<GetTopRatedSeries> {
+                override fun onResponse(call: Call<GetTopRatedSeries>?, response: Response<GetTopRatedSeries>?) {
+                    val movieList=ArrayList(response!!.body().results)
+                    SeriesGetTopRatedModel.setResponse(movieList)
+                }
+                override fun onFailure(call: Call<GetTopRatedSeries>?, t: Throwable?) {
+                    System.out.println("mcmcmc:")
+                }
+            })
+        }
+
     }
+
 }
 
 

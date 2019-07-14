@@ -1,4 +1,4 @@
-package com.example.nytimesmoviesreview.Fragments
+package com.example.nytimesmoviesreview.fragments
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -25,7 +25,6 @@ class NowPlayingMoviesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         menuRecyclerView.apply {
             layoutManager=LinearLayoutManager(activity)
-
             adapter=MoviesAdapter(MovieNowPlayingModel.getResponse()!!.toList())
         }
     }

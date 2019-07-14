@@ -1,24 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.Toolbar
         xmlns:android="http://schemas.android.com/apk/res/android"
-                                     android:layout_width="match_parent"
-                                     android:layout_height="wrap_content"
-                                     android:background="@color/colorPrimary"
-                                     android:elevation="10dp"
->
+        xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:layout_height="55dp"
+        android:background="@color/colorPrimary"
+        android:elevation="10dp">
 
-    <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_call_made_black_24dp"
-            android:id="@+id/hamburger" android:onClick="openDrawerMenu"/>
+    <android.support.constraint.ConstraintLayout android:layout_width="match_parent"
+                                                 android:layout_height="55dp">
+        <ImageView android:layout_width="40dp" android:layout_height="40dp"
+                   app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent"
+                   app:layout_constraintBottom_toBottomOf="parent" app:srcCompat="@android:drawable/ic_menu_search"
+                   android:id="@+id/imageView2"/>
+        <EditText
+                android:layout_width="240dp"
+                android:layout_height="55dp"
+                android:inputType="textPersonName"
+                android:background="@null"
+                android:enabled="false"
 
-    <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="Dynamic Text"
-            android:gravity="center"
-            android:textSize="14dp"
-            android:id="@+id/title_text"/>
+
+                android:id="@+id/editText" android:layout_marginStart="8dp"
+                app:layout_constraintEnd_toStartOf="@+id/imageView2" app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintHorizontal_bias="0.6"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1" android:ems="10"
+                style="@android:style/Widget.Material.Light.EditText"/>
+
+
+    </android.support.constraint.ConstraintLayout>
 
 </android.support.v7.widget.Toolbar>

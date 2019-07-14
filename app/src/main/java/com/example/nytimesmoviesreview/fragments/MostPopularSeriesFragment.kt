@@ -1,4 +1,4 @@
-package com.example.nytimesmoviesreview.Fragments
+package com.example.nytimesmoviesreview.fragments
 
 import android.os.Bundle
 import android.support.v4.app.Fragment

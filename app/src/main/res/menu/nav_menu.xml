@@ -4,8 +4,9 @@
         <menu
         >
             <item android:title="Movie Lists" android:id="@+id/movie_lists"
-                  android:icon="@drawable/ic_call_made_black_24dp"/>
-            <item android:title="Series Lists" android:id="@+id/series_lists"/>
+                  android:icon="@drawable/ic_movie_black_24dp"/>
+            <item android:title="Series Lists" android:id="@+id/series_lists"
+            android:icon="@drawable/ic_tv_black_24dp"/>
             <item
                     android:id="@+id/app_bar_switch"
                     android:title="Switch"
@@ -13,9 +14,9 @@
                     app:actionLayout="@layout/switch_item"/>
         </menu>
     </item>
+
     <item android:title="People">
-        <menu
-        >
+        <menu>
             <item android:title="Artists" android:id="@+id/action_third"/>
         </menu>
     </item>
