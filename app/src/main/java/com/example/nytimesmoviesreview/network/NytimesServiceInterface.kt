@@ -3,6 +3,8 @@ package com.example.nytimesmoviesreview.network
 import com.example.nytimesmoviesreview.dto.*
 import retrofit2.Call
 import retrofit2.http.GET
+import retrofit2.http.Query
+import retrofit2.http.QueryMap
 import retrofit2.http.Url
 
 interface NytimesServiceInterface {
@@ -23,4 +25,7 @@ interface NytimesServiceInterface {
 
     @GET()
     fun getTopRatedSeries(@Url url:String): Call<GetTopRatedSeries>
+
+    @GET()
+    fun getSearchMovie(@Url url:String, @QueryMap queryMap:Map<String, String>): Call<GetSearchMovieDTO>
 }

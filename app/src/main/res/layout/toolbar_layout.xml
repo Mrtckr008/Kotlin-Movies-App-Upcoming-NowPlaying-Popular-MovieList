@@ -13,23 +13,32 @@
                                                  android:layout_height="55dp">
         <ImageView android:layout_width="40dp" android:layout_height="40dp"
                    app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent"
-                   app:layout_constraintBottom_toBottomOf="parent" app:srcCompat="@android:drawable/ic_menu_search"
-                   android:id="@+id/imageView2"/>
+                   app:layout_constraintBottom_toBottomOf="parent"
+                   android:onClick="searchButton"
+                   app:srcCompat="@drawable/ic_search_black_24dp"
+                   android:id="@+id/search_button"/>
         <EditText
                 android:layout_width="240dp"
                 android:layout_height="55dp"
                 android:inputType="textPersonName"
                 android:background="@null"
-                android:enabled="false"
+                android:hint="Enter Movie Name"
 
-
-                android:id="@+id/editText" android:layout_marginStart="8dp"
-                app:layout_constraintEnd_toStartOf="@+id/imageView2" app:layout_constraintStart_toStartOf="parent"
+                android:id="@+id/search_edit_text" android:layout_marginStart="8dp"
+                app:layout_constraintEnd_toStartOf="@+id/search_button" app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintHorizontal_bias="0.6"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1" android:ems="10"
-                style="@android:style/Widget.Material.Light.EditText"/>
+                style="@android:style/Widget.Material.Light.EditText" android:visibility="gone"/>
+        <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp" app:srcCompat="@drawable/ic_filter_list_black_24dp"
+                android:id="@+id/filterMovie" app:layout_constraintBottom_toBottomOf="parent"
+                android:visibility="gone"
+                android:onClick="filterMovie"
+                app:layout_constraintEnd_toStartOf="@+id/search_button" android:layout_marginBottom="8dp"
+                app:layout_constraintTop_toTopOf="@+id/search_button"/>
 
 
     </android.support.constraint.ConstraintLayout>

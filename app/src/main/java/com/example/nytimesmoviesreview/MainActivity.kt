@@ -18,9 +18,7 @@ import com.example.nytimesmoviesreview.adapter.ViewPagerAdapter
 import android.view.View.GONE
 import android.view.LayoutInflater
 import com.example.nytimesmoviesreview.fragments.*
-import com.example.nytimesmoviesreview.dto.GetPopularSeries
 import com.example.nytimesmoviesreview.model.SeriesGetPopularModel
-import com.example.nytimesmoviesreview.dto.GetTopRatedSeries
 import com.example.nytimesmoviesreview.model.SeriesGetTopRatedModel
 import com.example.nytimesmoviesreview.network.NytimesServiceInterface
 import com.example.nytimesmoviesreview.network.RetrofitClient
@@ -29,10 +27,23 @@ import retrofit2.Callback
 import retrofit2.Response
 import android.app.Activity
 import android.app.PendingIntent.getActivity
+import android.os.StrictMode
 import android.view.WindowManager
 import android.widget.EditText
 import android.support.v4.content.ContextCompat.getSystemService
+import android.support.v7.app.AlertDialog
+import android.text.InputType
 import android.view.inputmethod.InputMethodManager
+import android.widget.CheckBox
+import android.widget.ImageView
+import android.widget.Toast
+import com.example.nytimesmoviesreview.ApiCalls.ApiCall
+import com.example.nytimesmoviesreview.dto.*
+import com.example.nytimesmoviesreview.model.MovieNowPlayingModel
+import com.example.nytimesmoviesreview.model.MovieSearchModel
+import kotlinx.android.synthetic.main.filter_movie.*
+import kotlinx.android.synthetic.main.filter_movie.view.*
+import kotlinx.android.synthetic.main.toolbar_layout.*
 
 
 class MainActivity : AppCompatActivity(),NavigationView.OnNavigationItemSelectedListener {
@@ -45,14 +56,20 @@ class MainActivity : AppCompatActivity(),NavigationView.OnNavigationItemSelected
     private var drawer: DrawerLayout? = null
     lateinit var mFragmentManager: FragmentManager
     lateinit var mFragmentTransaction: FragmentTransaction
-
-
+    var myEventListenerVariable=0
+var editTextHello:EditText?=null
     override fun onCreate(savedInstanceState: Bundle?) {
+        val policy = StrictMode.ThreadPolicy.Builder().permitAll().build()
+        StrictMode.setThreadPolicy(policy)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.drawer_layout)
         CallSeriesApis()
         fragment = NowPlayingMoviesFragment()
 
+        //login button click of custom layout
+        val v = LayoutInflater.from(this).inflate(R.layout.filter_movie, null)
+
+         editTextHello = v.findViewById<EditText>(R.id.movie_name_filtered)
 
         setSupportActionBar(toolbar)
         nav_view = findViewById(R.id.nav_view)
@@ -177,6 +194,89 @@ class MainActivity : AppCompatActivity(),NavigationView.OnNavigationItemSelected
                 }
             })
         }
+    }
+
+    fun searchButton(view: View){
+        val edit = findViewById<View>(R.id.search_edit_text) as EditText
+        if(myEventListenerVariable==0) {
+
+            val filterButton=findViewById<View>(R.id.filterMovie) as ImageView
+            edit.isEnabled = true
+            edit.isFocusable = true
+
+            filterButton.setVisibility(View.VISIBLE)
+            edit.setVisibility(View.VISIBLE);
+            myEventListenerVariable++
+        }
+        else
+        {
+
+
+            val data = HashMap<String,String>()
+
+            if(edit.text.toString()!="") {
+
+
+                data.put("query",edit.text.toString())
+                MovieSearchModel.queriesData=data
+
+                val intent = Intent(this, SearchActivity::class.java)
+                startActivity(intent)
+                }
+            else(
+                    Toast.makeText(this, "Please enter to movie name!", Toast.LENGTH_SHORT).show()
+                    )
+        }
+
+    }
+
+    fun filterMovie(view: View){
+
+
+        val mDialogView = LayoutInflater.from(this).inflate(R.layout.filter_movie, null)
+        //AlertDialogBuilder
+        val mBuilder = AlertDialog
+            .Builder(this)
+            .setView(mDialogView)
+        //show dialog
+        val  mAlertDialog = mBuilder.show()
+        mAlertDialog.window.setLayout(1000, 800)                 // width and height have to calculate with screen size.
+
+        mDialogView.search_movie.setOnClickListener {
+            if(editTextHello?.text.toString()!=""){
+                val data = HashMap<String,String>()
+
+                data.put("query",movie_name_filtered.text.toString())
+                if(movie_year_filter.text.toString()!="")
+                data.put("year",movie_year_filter.text.toString())
+                if(adult_checkbox.isChecked){
+                    data.put("include_adult","true")
+                }
+                else data.put("include_adult","false")
+
+
+                MovieSearchModel.queriesData=data
+
+                val intent = Intent(this, SearchActivity::class.java)
+                startActivity(intent)
+}
+
+            else{
+                Toast.makeText(this, "Please enter to movie name!", Toast.LENGTH_SHORT).show()
+            }
+
+
+
+            //dismiss dialog
+            mAlertDialog.dismiss()
+            //get text from EditTexts of custom layout
+
+            //set the input text in TextView
+
+        }
+
+
+
 
     }
 

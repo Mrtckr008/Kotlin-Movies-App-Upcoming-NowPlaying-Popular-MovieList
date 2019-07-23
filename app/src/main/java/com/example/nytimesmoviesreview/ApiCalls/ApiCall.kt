@@ -1,18 +1,17 @@
 package com.example.nytimesmoviesreview.ApiCalls
 
 import com.example.nytimesmoviesreview.dto.*
-import com.example.nytimesmoviesreview.model.MovieGetPopularModel
-import com.example.nytimesmoviesreview.model.MovieGetTrendModel
-import com.example.nytimesmoviesreview.model.MovieGetUpcomingModel
-import com.example.nytimesmoviesreview.model.MovieNowPlayingModel
+import com.example.nytimesmoviesreview.model.*
 import com.example.nytimesmoviesreview.network.NytimesServiceInterface
 import com.example.nytimesmoviesreview.network.RetrofitClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import retrofit2.http.QueryMap
 
 class ApiCall {
     fun calls() {
+
         val service = RetrofitClient.getClient().create(NytimesServiceInterface::class.java)
         val callNowPlayingMovies =
             service.getNowPlayingMovies("movie/now_playing?api_key=ac3cbd07a68825e9716c144bd088350f")
@@ -22,6 +21,12 @@ class ApiCall {
             service.getUpcomingMovies("movie/upcoming?api_key=ac3cbd07a68825e9716c144bd088350f&language=en-US&page=1")
         val callTrendMoviesAndSeries =
             service.getTrendMoviesAndSeries("trending/all/day?api_key=ac3cbd07a68825e9716c144bd088350f")
+
+
+
+
+
+
 
     /*    callNowPlayingMovies.enqueue(object : Callback<GetMovieNowPlaying> {
             override fun onResponse(call: Call<GetMovieNowPlaying>?, response: Response<GetMovieNowPlaying>?) {
@@ -87,8 +92,6 @@ class ApiCall {
 
         var movieList3:GetTrendMoviesAndSeries? = callTrendMoviesAndSeries.clone().execute().body()
         MovieGetTrendModel.setResponse(movieList3!!.results as ArrayList<TrendMoviesAndSeriesResult>)
-
-
 
     }
 

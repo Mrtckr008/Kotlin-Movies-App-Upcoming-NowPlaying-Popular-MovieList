@@ -1,67 +1,45 @@
 package com.example.nytimesmoviesreview
 
-import android.content.Intent
-import android.os.AsyncTask
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.support.v4.content.ContextCompat.startActivity
-import android.view.View
-import com.example.nytimesmoviesreview.ApiCalls.ApiCall
-import com.example.nytimesmoviesreview.dto.*
-import com.example.nytimesmoviesreview.model.*
+import com.example.nytimesmoviesreview.dto.GetSearchMovieDTO
+import com.example.nytimesmoviesreview.dto.SearchMovieResults
+import com.example.nytimesmoviesreview.model.MovieSearchModel
 import com.example.nytimesmoviesreview.network.NytimesServiceInterface
 import com.example.nytimesmoviesreview.network.RetrofitClient
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import java.lang.ref.WeakReference
+import android.os.StrictMode
+import android.support.v7.widget.LinearLayoutManager
+import com.example.nytimesmoviesreview.adapter.MoviesAdapterGetPopular
+import com.example.nytimesmoviesreview.adapter.MoviesAdapterGetSearch
+import com.example.nytimesmoviesreview.model.MovieGetPopularModel
+import kotlinx.android.synthetic.main.activity_search.*
+import kotlinx.android.synthetic.main.now_playing_fragment.*
+
 
 class SearchActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        val policy = StrictMode.ThreadPolicy.Builder().permitAll().build()
+        StrictMode.setThreadPolicy(policy)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
+        callSearchApi()
 
-
-
-
-        val task = MyAsyncTask(this)
-        task.execute(10)
 
 
     }
+    fun callSearchApi(){ val service = RetrofitClient.getClient().create(NytimesServiceInterface::class.java)
+
+        val callSearchMovies = service.getSearchMovie("search/movie?api_key=ac3cbd07a68825e9716c144bd088350f&language=en-US",MovieSearchModel.queriesData)
+        var movieList4: GetSearchMovieDTO? = callSearchMovies.clone().execute().body()
+        // MovieGetTrendModel.setResponse(movieList3!!.results as ArrayList<TrendMoviesAndSeriesResult>)
+        MovieSearchModel.setResponse(movieList4!!.results as ArrayList<SearchMovieResults>)
 
 
-    class MyAsyncTask internal constructor(var context: SearchActivity) : AsyncTask<Int, String, String?>() {
-        private var resp: String? = null
-        private val activityReference: WeakReference<SearchActivity> = WeakReference(context)
+        SearchMenuRecyclerView.apply {
+            layoutManager=LinearLayoutManager(this@SearchActivity)
+            adapter = MoviesAdapterGetSearch(MovieSearchModel.getResponse()!!.toList())
+        }}
 
-        override fun onPreExecute() {
-            System.out.println("MCOnPreExecute")
-            val activity = activityReference.get()
-            if (activity == null || activity.isFinishing) return
-
-        }
-
-        override fun doInBackground(vararg params: Int?): String? {
-            publishProgress("Calls Started") // Calls onProgressUpdate()
-            try {
-                ApiCall().calls()
-            } catch (e: InterruptedException) {
-                e.printStackTrace()
-                resp = e.message
-            } catch (e: Exception) {
-                e.printStackTrace()
-                resp = e.message
-            }
-            return resp                                                              //Need to find some way for if api has some problem.
-        }
-
-
-        override fun onPostExecute(result: String?) {
-            val intent = Intent(context, MainActivity::class.java)
-            startActivity(context,intent,null)
-        }
-    }
 
 }
