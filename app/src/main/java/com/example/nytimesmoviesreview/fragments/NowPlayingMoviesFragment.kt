@@ -1,18 +1,21 @@
 package com.example.nytimesmoviesreview.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
+import android.view.ContextMenu
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.nytimesmoviesreview.MainActivity
 import com.example.nytimesmoviesreview.R
 
 import com.example.nytimesmoviesreview.adapter.MoviesAdapter
 import com.example.nytimesmoviesreview.model.MovieNowPlayingModel
 import kotlinx.android.synthetic.main.main_fragment.*
 
-class NowPlayingMoviesFragment : Fragment() {
+class NowPlayingMoviesFragment() : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,7 +28,7 @@ class NowPlayingMoviesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         menuRecyclerView.apply {
             layoutManager=LinearLayoutManager(activity)
-            adapter=MoviesAdapter(MovieNowPlayingModel.getResponse()!!.toList())
+            adapter=MoviesAdapter(MovieNowPlayingModel.getResponse()!!.toList(),context)
         }
     }
 companion object{

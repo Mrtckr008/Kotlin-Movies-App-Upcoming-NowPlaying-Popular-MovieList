@@ -28,4 +28,7 @@ interface NytimesServiceInterface {
 
     @GET()
     fun getSearchMovie(@Url url:String, @QueryMap queryMap:Map<String, String>): Call<GetSearchMovieDTO>
+
+    @GET()
+    fun getMovieDetail(@Url url:String, @QueryMap queryMap:Map<String, String>): Call<GetMovieDetail>
 }

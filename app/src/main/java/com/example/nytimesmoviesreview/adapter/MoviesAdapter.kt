@@ -1,5 +1,9 @@
 package com.example.nytimesmoviesreview.adapter
 
+import android.content.Context
+import android.content.Intent
+import android.support.v4.content.ContextCompat
+import android.support.v4.content.ContextCompat.startActivity
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
 
@@ -9,11 +13,23 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.example.nytimesmoviesreview.DetailActivity
+import com.example.nytimesmoviesreview.MainActivity
 import com.example.nytimesmoviesreview.R
+import com.example.nytimesmoviesreview.SearchActivity
 import com.example.nytimesmoviesreview.dto.Result
+import android.support.v4.app.ActivityOptionsCompat
+import android.support.v4.view.ViewCompat
+import kotlinx.android.synthetic.main.activity_splash.view.*
+import kotlinx.android.synthetic.main.movies_item_list.view.*
+import android.support.v4.content.ContextCompat.startActivity
+import android.app.Activity
+import android.support.v4.view.ViewCompat.getTransitionName
+import android.support.v4.view.ViewCompat.setTransitionName
+import android.view.View
 
 
-class MoviesAdapter(moviesList:List<Result>):RecyclerView.Adapter<MoviesViewHolder>() {
+class MoviesAdapter(moviesList:List<Result>,var context: Context):RecyclerView.Adapter<MoviesViewHolder>() {
 
     var moviesList=moviesList
     private val layoutManager: LinearLayoutManager? = null
@@ -24,6 +40,14 @@ class MoviesAdapter(moviesList:List<Result>):RecyclerView.Adapter<MoviesViewHold
 
     override fun onBindViewHolder(holder: MoviesViewHolder, position: Int) {
         holder.bindTo(moviesList[position])
+
+        holder.itemView.setOnClickListener{
+        System.out.println("mcmcClick"+moviesList[position].id)
+
+            val intent = Intent(context, DetailActivity::class.java)
+            startActivity(context,intent,null)
+
+            }
     }
 
     override fun getItemCount(): Int {
@@ -48,7 +72,7 @@ class MoviesViewHolder(viewGroup: ViewGroup):RecyclerView.ViewHolder
         txtHeadline.text = "Popularity Point: "+MoviesDto.popularity.toString()
         txtOpeningDate.text = "Release Date: "+MoviesDto.releaseDate
 
-        Glide.with(itemView.context).load("https://image.tmdb.org/t/p/original/"+MoviesDto.posterPath)
+        Glide.with(itemView.context).load("https://image.tmdb.org/t/p/w300/"+MoviesDto.posterPath)
             .thumbnail(Glide.with(itemView.context).load(R.drawable.abc_ic_go_search_api_material))
             .transition(DrawableTransitionOptions.withCrossFade()).into(imgViewImageUrl)
 itemView.setOnClickListener{

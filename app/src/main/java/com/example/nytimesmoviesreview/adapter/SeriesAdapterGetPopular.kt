@@ -24,6 +24,10 @@ class MoviesAdapterGetPopularSeries(moviesList:List<ResultPopularSeries>):Recycl
 
     override fun onBindViewHolder(holder: SeriesViewHolderGetUpcoming, position: Int) {
         holder.bindTo(moviesList[position])
+        holder.itemView.setOnClickListener{
+            System.out.println("mcmcClick"+moviesList[position].id)
+
+        }
     }
 
     override fun getItemCount(): Int {
@@ -49,7 +53,7 @@ class SeriesViewHolderGetUpcoming(viewGroup: ViewGroup):RecyclerView.ViewHolder
         txtHeadline.text = "Popularity Point: "+MoviesDto.popularity.toString()
         txtOpeningDate.text = "Overview: "+MoviesDto.overview
 
-        Glide.with(itemView.context).load("https://image.tmdb.org/t/p/original/"+MoviesDto.posterPath)
+        Glide.with(itemView.context).load("https://image.tmdb.org/t/p/w300/"+MoviesDto.posterPath)
             .thumbnail(Glide.with(itemView.context).load(R.drawable.abc_ic_go_search_api_material))
             .transition(DrawableTransitionOptions.withCrossFade()).into(imgViewImageUrl)
 
