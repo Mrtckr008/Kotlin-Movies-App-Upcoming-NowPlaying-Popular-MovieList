@@ -1,5 +1,8 @@
 package com.example.nytimesmoviesreview.adapter
 
+import android.content.Context
+import android.content.Intent
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
 
@@ -9,11 +12,14 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.example.nytimesmoviesreview.ApiCalls.ApiCall
+import com.example.nytimesmoviesreview.DetailActivity
+import com.example.nytimesmoviesreview.MainActivity
 import com.example.nytimesmoviesreview.R
 import com.example.nytimesmoviesreview.dto.ResultPopularMovies
 
 
-class MoviesAdapterGetPopular(moviesList:List<ResultPopularMovies>):RecyclerView.Adapter<MoviesViewHolderGetPopular>() {
+class MoviesAdapterGetPopular(moviesList:List<ResultPopularMovies>,var context:Context):RecyclerView.Adapter<MoviesViewHolderGetPopular>() {
 
     var moviesList=moviesList
     private val layoutManager: LinearLayoutManager? = null
@@ -25,16 +31,17 @@ class MoviesAdapterGetPopular(moviesList:List<ResultPopularMovies>):RecyclerView
         holder.bindTo(moviesList[position])
         holder.itemView.setOnClickListener{
             System.out.println("mcmcClick"+moviesList[position].id)
+            ApiCall.movieId=moviesList[position].id?.toInt().toString()
 
+            val intent = Intent(context, DetailActivity::class.java)
+
+            ContextCompat.startActivity(context, intent, null)
         }
     }
 
     override fun getItemCount(): Int {
         return moviesList.size
      }
-    fun setMovieList(moviesList: List<ResultPopularMovies>){
-        this.moviesList=moviesList
-    }
 
 
 /*    override fun onViewRecycled(holder: MoviesViewHolder) {

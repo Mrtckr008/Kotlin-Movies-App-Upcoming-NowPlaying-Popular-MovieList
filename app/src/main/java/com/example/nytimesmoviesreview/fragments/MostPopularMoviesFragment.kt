@@ -24,7 +24,7 @@ class MostPopularMoviesFragment :Fragment(){
 
         detailFragmentsRecyclerView.apply {
                 layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
-                adapter = MoviesAdapterGetPopular(MovieGetPopularModel.getResponse()!!.toList())
+                adapter = MoviesAdapterGetPopular(MovieGetPopularModel.getResponse()!!.toList(),context)
             }
 
     }

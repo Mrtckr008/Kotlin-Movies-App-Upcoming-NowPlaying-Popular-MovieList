@@ -1,10 +1,12 @@
 package com.example.nytimesmoviesreview.adapter
 
+import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
 
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
@@ -14,7 +16,7 @@ import com.example.nytimesmoviesreview.dto.ResultPopularSeries
 
 
 
-class MoviesAdapterGetPopularSeries(moviesList:List<ResultPopularSeries>):RecyclerView.Adapter<SeriesViewHolderGetUpcoming>() {
+class MoviesAdapterGetPopularSeries(moviesList:List<ResultPopularSeries>,var context:Context):RecyclerView.Adapter<SeriesViewHolderGetUpcoming>() {
 
     var moviesList=moviesList
     private val layoutManager: LinearLayoutManager? = null
@@ -24,6 +26,7 @@ class MoviesAdapterGetPopularSeries(moviesList:List<ResultPopularSeries>):Recycl
 
     override fun onBindViewHolder(holder: SeriesViewHolderGetUpcoming, position: Int) {
         holder.bindTo(moviesList[position])
+
         holder.itemView.setOnClickListener{
             System.out.println("mcmcClick"+moviesList[position].id)
 
@@ -47,8 +50,12 @@ class SeriesViewHolderGetUpcoming(viewGroup: ViewGroup):RecyclerView.ViewHolder
     private val imgViewImageUrl by lazy { itemView.findViewById<ImageView>(R.id.imgViewImageUrl) }
 
 
+
     fun bindTo(MoviesDto: ResultPopularSeries) {
 
+        View.OnClickListener{
+            System.out.println("mcmcClick"+MoviesDto.id)
+        }
         txtDisplayTitle.text = MoviesDto.name
         txtHeadline.text = "Popularity Point: "+MoviesDto.popularity.toString()
         txtOpeningDate.text = "Overview: "+MoviesDto.overview

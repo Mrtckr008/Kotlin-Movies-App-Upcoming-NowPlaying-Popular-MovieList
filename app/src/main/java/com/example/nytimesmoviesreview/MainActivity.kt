@@ -28,6 +28,7 @@ import retrofit2.Response
 import android.app.Activity
 import android.app.PendingIntent.getActivity
 import android.os.StrictMode
+import android.support.v4.app.ActivityOptionsCompat
 import android.view.WindowManager
 import android.widget.EditText
 import android.support.v4.content.ContextCompat.getSystemService
@@ -43,6 +44,7 @@ import com.example.nytimesmoviesreview.model.MovieNowPlayingModel
 import com.example.nytimesmoviesreview.model.MovieSearchModel
 import kotlinx.android.synthetic.main.filter_movie.*
 import kotlinx.android.synthetic.main.filter_movie.view.*
+import kotlinx.android.synthetic.main.movies_item_list.*
 import kotlinx.android.synthetic.main.toolbar_layout.*
 
 
@@ -57,7 +59,7 @@ class MainActivity : AppCompatActivity(),NavigationView.OnNavigationItemSelected
     lateinit var mFragmentManager: FragmentManager
     lateinit var mFragmentTransaction: FragmentTransaction
     var myEventListenerVariable=0
-var editTextHello:EditText?=null
+var movieNameFilter:EditText?=null
     override fun onCreate(savedInstanceState: Bundle?) {
         val policy = StrictMode.ThreadPolicy.Builder().permitAll().build()
         StrictMode.setThreadPolicy(policy)
@@ -69,7 +71,7 @@ var editTextHello:EditText?=null
         //login button click of custom layout
         val v = LayoutInflater.from(this).inflate(R.layout.filter_movie, null)
 
-         editTextHello = v.findViewById<EditText>(R.id.movie_name_filtered)
+        movieNameFilter = v.findViewById<EditText>(R.id.movie_name_filtered)
 
         setSupportActionBar(toolbar)
         nav_view = findViewById(R.id.nav_view)
@@ -243,7 +245,7 @@ var editTextHello:EditText?=null
         mAlertDialog.window.setLayout(1000, 800)                 // width and height have to calculate with screen size.
 
         mDialogView.search_movie.setOnClickListener {
-            if(editTextHello?.text.toString()!=""){
+            if(movieNameFilter?.text.toString()!=""){
                 val data = HashMap<String,String>()
 
                 data.put("query",movie_name_filtered.text.toString())
@@ -279,7 +281,11 @@ var editTextHello:EditText?=null
 
 
     }
+    fun template( context:Context){
 
+
+
+    }
 }
 
 

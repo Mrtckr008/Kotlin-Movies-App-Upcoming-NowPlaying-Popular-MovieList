@@ -10,8 +10,10 @@ import retrofit2.Response
 import retrofit2.http.QueryMap
 
 class ApiCall {
+    companion object {
+        var movieId:String?=null
+    }
     fun calls() {
-
         val service = RetrofitClient.getClient().create(NytimesServiceInterface::class.java)
         val callNowPlayingMovies =
             service.getNowPlayingMovies("movie/now_playing?api_key=ac3cbd07a68825e9716c144bd088350f")
@@ -21,10 +23,6 @@ class ApiCall {
             service.getUpcomingMovies("movie/upcoming?api_key=ac3cbd07a68825e9716c144bd088350f&language=en-US&page=1")
         val callTrendMoviesAndSeries =
             service.getTrendMoviesAndSeries("trending/all/day?api_key=ac3cbd07a68825e9716c144bd088350f")
-
-
-
-
 
 
 
@@ -90,9 +88,17 @@ class ApiCall {
         })
 */
 
-        var movieList3:GetTrendMoviesAndSeries? = callTrendMoviesAndSeries.clone().execute().body()
+        val movieList3:GetTrendMoviesAndSeries? = callTrendMoviesAndSeries.clone().execute().body()
         MovieGetTrendModel.setResponse(movieList3!!.results as ArrayList<TrendMoviesAndSeriesResult>)
 
+
+    }
+    fun callMovieDetail():GetMovieDetail{
+        val service = RetrofitClient.getClient().create(NytimesServiceInterface::class.java)
+        val callMovieDetail= service.getMovieDetail("movie/$movieId?api_key=ac3cbd07a68825e9716c144bd088350f&language=en-US")
+        val movieDetail:GetMovieDetail? = callMovieDetail.clone().execute().body()
+        MovieGetDetailModel.setResponse(movieDetail!!)
+        return movieDetail
     }
 
 }

@@ -25,7 +25,7 @@ class MostPopularSeriesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         menuRecyclerView.apply {
             layoutManager=LinearLayoutManager(activity)
-            adapter=MoviesAdapterGetPopularSeries(SeriesGetPopularModel.getResponse()!!.toList())
+            adapter=MoviesAdapterGetPopularSeries(SeriesGetPopularModel.getResponse()!!.toList(),context)
         }
     }
 companion object{

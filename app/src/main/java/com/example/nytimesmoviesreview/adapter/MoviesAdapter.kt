@@ -27,6 +27,8 @@ import android.app.Activity
 import android.support.v4.view.ViewCompat.getTransitionName
 import android.support.v4.view.ViewCompat.setTransitionName
 import android.view.View
+import com.example.nytimesmoviesreview.ApiCalls.ApiCall
+import kotlinx.android.synthetic.main.movies_item_list.*
 
 
 class MoviesAdapter(moviesList:List<Result>,var context: Context):RecyclerView.Adapter<MoviesViewHolder>() {
@@ -42,20 +44,20 @@ class MoviesAdapter(moviesList:List<Result>,var context: Context):RecyclerView.A
         holder.bindTo(moviesList[position])
 
         holder.itemView.setOnClickListener{
-        System.out.println("mcmcClick"+moviesList[position].id)
+        System.out.println("mcmcClick"+moviesList[position].id?.toInt())
+            ApiCall.movieId=moviesList[position].id?.toInt().toString()
 
             val intent = Intent(context, DetailActivity::class.java)
-            startActivity(context,intent,null)
 
-            }
+            startActivity(context,intent, null)
+
+return@setOnClickListener
+          }
     }
 
     override fun getItemCount(): Int {
         return moviesList.size
      }
-    fun setMovieList(moviesList: List<Result>){
-        this.moviesList=moviesList
-    }
     
 
 }
@@ -75,11 +77,11 @@ class MoviesViewHolder(viewGroup: ViewGroup):RecyclerView.ViewHolder
         Glide.with(itemView.context).load("https://image.tmdb.org/t/p/w300/"+MoviesDto.posterPath)
             .thumbnail(Glide.with(itemView.context).load(R.drawable.abc_ic_go_search_api_material))
             .transition(DrawableTransitionOptions.withCrossFade()).into(imgViewImageUrl)
-itemView.setOnClickListener{
+        itemView.setOnClickListener{
 
-
-
-}
+        System.out.println("mcmcClick"+ MoviesDto.id)
+return@setOnClickListener
+        }
     }
 
 

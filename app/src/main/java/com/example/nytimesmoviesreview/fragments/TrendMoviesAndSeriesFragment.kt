@@ -23,7 +23,7 @@ class TrendMoviesAndSeriesFragment:Fragment() {
         super.onViewCreated(view, savedInstanceState)
             thirdFragmentsRecyclerView.apply {
                 layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
-                adapter = MoviesAdapterGetUpcoming(MovieGetTrendModel.getResponse()!!.toList())
+                adapter = MoviesAdapterGetUpcoming(MovieGetTrendModel.getResponse()!!.toList(),context)
             }
 
     }
