@@ -24,7 +24,7 @@ class TopRatedSeriesFragment :Fragment(){
 
         detailFragmentsRecyclerView.apply {
                 layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
-                adapter = SeriesAdapterGetTopRatedSeries(SeriesGetTopRatedModel.getResponse()!!.toList())
+                adapter = SeriesAdapterGetTopRatedSeries(SeriesGetTopRatedModel.getResponse()!!.toList(),context)
             }
 
     }

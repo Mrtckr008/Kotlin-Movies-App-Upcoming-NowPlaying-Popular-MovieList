@@ -33,6 +33,10 @@ class MoviesAdapterGetUpcoming(moviesList:List<TrendMoviesAndSeriesResult>,var c
         holder.bindTo(moviesList[position])
         holder.itemView.setOnClickListener{
             System.out.println("mcmcClick"+moviesList[position].TrendMoviesAndSeriesid)
+            if(moviesList[position].firstAirDate==null)
+                DetailActivity.isItMovie=true
+            else
+                DetailActivity.isItMovie=false
             ApiCall.movieId=moviesList[position].TrendMoviesAndSeriesid?.toString()
 
             val intent = Intent(context, DetailActivity::class.java)

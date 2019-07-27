@@ -1,5 +1,8 @@
 package com.example.nytimesmoviesreview.adapter
 
+import android.content.Context
+import android.content.Intent
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
 
@@ -9,13 +12,15 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.example.nytimesmoviesreview.ApiCalls.ApiCall
+import com.example.nytimesmoviesreview.DetailActivity
 import com.example.nytimesmoviesreview.R
 import com.example.nytimesmoviesreview.dto.ResultGetTopRatedSeries
 import com.example.nytimesmoviesreview.dto.ResultPopularSeries
 
 
 
-class SeriesAdapterGetTopRatedSeries(moviesList:List<ResultGetTopRatedSeries>):RecyclerView.Adapter<SeriesViewHolderGetTopRated>() {
+class SeriesAdapterGetTopRatedSeries(moviesList:List<ResultGetTopRatedSeries>,var context:Context):RecyclerView.Adapter<SeriesViewHolderGetTopRated>() {
 
     var moviesList=moviesList
     private val layoutManager: LinearLayoutManager? = null
@@ -27,7 +32,13 @@ class SeriesAdapterGetTopRatedSeries(moviesList:List<ResultGetTopRatedSeries>):R
         holder.bindTo(moviesList[position])
         holder.itemView.setOnClickListener{
             System.out.println("mcmcClick"+moviesList[position].id)
+            DetailActivity.isItMovie=false
+            ApiCall.movieId=moviesList[position].id?.toString()
+            val intent = Intent(context, DetailActivity::class.java)
 
+            ContextCompat.startActivity(context, intent, null)
+
+            return@setOnClickListener
         }
     }
 

@@ -97,8 +97,15 @@ class ApiCall {
         val service = RetrofitClient.getClient().create(NytimesServiceInterface::class.java)
         val callMovieDetail= service.getMovieDetail("movie/$movieId?api_key=ac3cbd07a68825e9716c144bd088350f&language=en-US")
         val movieDetail:GetMovieDetail? = callMovieDetail.clone().execute().body()
-        MovieGetDetailModel.setResponse(movieDetail!!)
-        return movieDetail
+
+        return movieDetail!!
+    }
+
+    fun callSeriesDetail():GetSeriesDetail{
+        val service = RetrofitClient.getClient().create(NytimesServiceInterface::class.java)
+        val callSeriesDetail= service.getSeriesDetail("tv/$movieId?api_key=ac3cbd07a68825e9716c144bd088350f&language=en-US")
+        val seriesDetail:GetSeriesDetail? = callSeriesDetail.clone().execute().body()
+        return seriesDetail!!
     }
 
 }

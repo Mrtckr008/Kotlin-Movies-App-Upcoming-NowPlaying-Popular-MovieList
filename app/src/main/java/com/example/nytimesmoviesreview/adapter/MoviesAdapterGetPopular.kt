@@ -31,6 +31,7 @@ class MoviesAdapterGetPopular(moviesList:List<ResultPopularMovies>,var context:C
         holder.bindTo(moviesList[position])
         holder.itemView.setOnClickListener{
             System.out.println("mcmcClick"+moviesList[position].id)
+            DetailActivity.isItMovie=true
             ApiCall.movieId=moviesList[position].id?.toInt().toString()
 
             val intent = Intent(context, DetailActivity::class.java)

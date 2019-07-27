@@ -31,4 +31,7 @@ interface NytimesServiceInterface {
 
     @GET()
     fun getMovieDetail(@Url url:String): Call<GetMovieDetail>
+
+    @GET()
+    fun getSeriesDetail(@Url url:String): Call<GetSeriesDetail>
 }

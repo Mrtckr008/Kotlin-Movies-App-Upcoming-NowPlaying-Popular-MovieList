@@ -45,12 +45,10 @@ class MoviesAdapter(moviesList:List<Result>,var context: Context):RecyclerView.A
 
         holder.itemView.setOnClickListener{
         System.out.println("mcmcClick"+moviesList[position].id?.toInt())
+            DetailActivity.isItMovie=true
             ApiCall.movieId=moviesList[position].id?.toInt().toString()
-
             val intent = Intent(context, DetailActivity::class.java)
-
             startActivity(context,intent, null)
-
 return@setOnClickListener
           }
     }

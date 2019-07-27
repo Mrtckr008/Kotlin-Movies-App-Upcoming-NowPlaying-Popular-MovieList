@@ -80,7 +80,7 @@ var movieNameFilter:EditText?=null
         setSupportActionBar(toolbar)
 
 
-        var toggle = ActionBarDrawerToggle(this, drawer, toolbar, 0, 0)
+        val toggle = ActionBarDrawerToggle(this, drawer, toolbar, 0, 0)
         drawer?.addDrawerListener(toggle)
 
         nav_view?.setNavigationItemSelectedListener(this)
@@ -277,11 +277,6 @@ var movieNameFilter:EditText?=null
 
         }
 
-
-
-
-    }
-    fun template( context:Context){
 
 
 
