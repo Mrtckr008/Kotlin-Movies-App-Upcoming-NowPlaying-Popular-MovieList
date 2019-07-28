@@ -9,7 +9,7 @@
             android:icon="@drawable/ic_tv_black_24dp"/>
             <item
                     android:id="@+id/app_bar_switch"
-                    android:title="Switch"
+                    android:title="Bildirimler"
                     app:showAsAction="always"
                     app:actionLayout="@layout/switch_item"/>
         </menu>
@@ -19,5 +19,14 @@
         <menu>
             <item android:title="Artists" android:id="@+id/action_third"/>
         </menu>
+    </item>
+
+    <item android:title="Your Lists">
+        <menu>
+            <item android:title="Favorite List" android:id="@+id/favorite_list" android:icon="@drawable/ic_star_black_24dp"/>
+            <item android:title="Watched List" android:id="@+id/watched_list" android:icon="@drawable/ic_playlist_add_check_black_24dp"/>
+            <item android:title="Watch List" android:id="@+id/watch_list" android:icon="@drawable/ic_watch_later_black_24dp"/>
+    </menu>
+
     </item>
 </menu>

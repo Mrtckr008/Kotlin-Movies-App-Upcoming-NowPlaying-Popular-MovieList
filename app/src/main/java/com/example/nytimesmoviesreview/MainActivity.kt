@@ -124,6 +124,11 @@ var movieNameFilter:EditText?=null
          //   tabLayout?.setVisibility(GONE)
          //   viewPager?.setVisibility(GONE)
         }
+        if(id==R.id.favorite_list){
+            drawer?.closeDrawers()
+
+        }
+
         if (item.itemId == 1) {
             changeFragment(MostPopularMoviesFragment())
             tabLayout?.setVisibility(GONE)

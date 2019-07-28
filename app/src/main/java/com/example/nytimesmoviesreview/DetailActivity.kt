@@ -106,6 +106,18 @@ companion object {
         }
     }
 
+    fun addFavoriteList(view:View){
+
+    }
+
+    fun addWatchedList(view:View){
+
+    }
+
+    fun addWatchList(view:View){
+
+    }
+
     override fun onBackPressed() {
         super.onBackPressed()
         finish()
