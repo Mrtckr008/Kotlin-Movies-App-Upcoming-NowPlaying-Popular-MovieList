@@ -35,18 +35,19 @@ import com.google.gson.Gson
 import kotlinx.android.synthetic.main.movies_item_list.*
 
 
-class UserListsAdapter(var context: Context):RecyclerView.Adapter<UserListViewHolder>() {
+class UserWatchedListAdapter(var context: Context):RecyclerView.Adapter<UserWatchedListViewHolder>() {
 
-    var moviesList= TinyDB(context).getListString("getMovieList")
+    var moviesList= TinyDB(context).getListString("getWatchedMovieList")
 
     private val layoutManager: LinearLayoutManager? = null
-    override fun onCreateViewHolder(parent: ViewGroup, ViewType: Int): UserListViewHolder {
-        return UserListViewHolder(parent)
+    override fun onCreateViewHolder(parent: ViewGroup, ViewType: Int): UserWatchedListViewHolder {
+        return UserWatchedListViewHolder(parent)
     }
 
 
-    override fun onBindViewHolder(holder: UserListViewHolder, position: Int) {
-        System.out.println("mcmc"+moviesList[position].substring(2,3))
+    override fun onBindViewHolder(holder: UserWatchedListViewHolder, position: Int) {
+
+System.out.println("mcmc"+moviesList[position].substring(2,3))
         if(moviesList[position].substring(2,3)=="a") {
             val gson = Gson()
             val feeds: Result = gson.fromJson(moviesList[position], Result::class.java)
@@ -75,7 +76,10 @@ class UserListsAdapter(var context: Context):RecyclerView.Adapter<UserListViewHo
                 val intent = Intent(context, DetailActivity::class.java)
                 ContextCompat.startActivity(context, intent, options.toBundle())
             }
+
         }
+
+
     }
 
     override fun getItemCount(): Int {
@@ -84,7 +88,7 @@ class UserListsAdapter(var context: Context):RecyclerView.Adapter<UserListViewHo
     
 
 }
-class UserListViewHolder(viewGroup: ViewGroup):RecyclerView.ViewHolder
+class UserWatchedListViewHolder(viewGroup: ViewGroup):RecyclerView.ViewHolder
     (LayoutInflater.from(viewGroup.context).inflate(R.layout.movies_item_list,viewGroup,false)){
     private val txtDisplayTitle by lazy { itemView.findViewById<TextView>(R.id.txtDisplayTitle)}
     private val txtHeadline by lazy {itemView.findViewById<TextView>(R.id.txtHeadline)}

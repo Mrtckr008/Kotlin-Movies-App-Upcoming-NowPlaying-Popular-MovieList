@@ -77,7 +77,7 @@ class ApiCall {
             override fun onResponse(
                 call: Call<GetTrendMoviesAndSeries>?,
                 response: Response<GetTrendMoviesAndSeries>?
-            ) {
+            ) {R
                 val movieList = ArrayList(response!!.body().results)
                 MovieGetTrendModel.setResponse(movieList)
 

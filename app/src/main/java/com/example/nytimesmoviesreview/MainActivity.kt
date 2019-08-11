@@ -25,27 +25,20 @@ import com.example.nytimesmoviesreview.network.RetrofitClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import android.app.Activity
-import android.app.PendingIntent.getActivity
 import android.os.StrictMode
-import android.support.v4.app.ActivityOptionsCompat
-import android.view.WindowManager
 import android.widget.EditText
-import android.support.v4.content.ContextCompat.getSystemService
 import android.support.v7.app.AlertDialog
-import android.text.InputType
 import android.view.inputmethod.InputMethodManager
-import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.Toast
-import com.example.nytimesmoviesreview.ApiCalls.ApiCall
-import com.example.nytimesmoviesreview.Fragments.UserListFragment
+import com.example.nytimesmoviesreview.Fragments.UserFavoriteListFragment
+import com.example.nytimesmoviesreview.Fragments.UserWatchListFragment
+import com.example.nytimesmoviesreview.Fragments.UserWatchedListFragment
 import com.example.nytimesmoviesreview.dto.*
-import com.example.nytimesmoviesreview.model.MovieNowPlayingModel
 import com.example.nytimesmoviesreview.model.MovieSearchModel
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.filter_movie.*
 import kotlinx.android.synthetic.main.filter_movie.view.*
-import kotlinx.android.synthetic.main.movies_item_list.*
 import kotlinx.android.synthetic.main.toolbar_layout.*
 
 
@@ -128,9 +121,33 @@ var movieNameFilter:EditText?=null
          //   viewPager?.setVisibility(GONE)
         }
         if(id==R.id.favorite_list){
+
+            toolbar_title.visibility=View.VISIBLE
+            toolbar_title.text="Favorite List"
+            tabLayout?.visibility = View.GONE
             decision=true
             drawer?.closeDrawers()
-            changeFragment(UserListFragment())
+            changeFragment(UserFavoriteListFragment())
+        }
+
+        if(id==R.id.watched_list){
+            toolbar_title.text="Watched List"
+            tabLayout?.visibility = View.GONE
+            toolbar_title.visibility=View.VISIBLE
+            decision=true
+            drawer?.closeDrawers()
+            changeFragment(UserWatchedListFragment())
+        }
+
+        if(id==R.id.watch_list){
+            toolbar_title.text="Watch List"
+            tabLayout?.visibility = View.GONE
+
+
+            toolbar_title.visibility=View.VISIBLE
+            decision=true
+            drawer?.closeDrawers()
+            changeFragment(UserWatchListFragment())
         }
 
         if (item.itemId == 1) {
@@ -162,33 +179,30 @@ var movieNameFilter:EditText?=null
 
     private fun setupViewUserListPager(viewPager: ViewPager) {
         val adapter = ViewPagerAdapter(supportFragmentManager)
-        adapter.addFragment(UserListFragment(), "Favorite List")
-        adapter.addFragment(UserListFragment(), "Watched List")
-        adapter.addFragment(UserListFragment(), "Watch List")
+        adapter.addFragment(UserFavoriteListFragment(), "Favorite List")
+        adapter.addFragment(UserWatchedListFragment(), "Watched List")
+        adapter.addFragment(UserWatchListFragment(), "Watch List")
         viewPager.adapter = adapter
     }
     fun changeFragment(fragment: Fragment) {
-
-
         if(!decision) {
+            fragment_frame.visibility=View.GONE
+            toolbar_title.visibility=View.GONE
+            tabLayout?.visibility = View.VISIBLE
             val fragmentTransaction = supportFragmentManager.beginTransaction()
             fragmentTransaction.replace(R.id.main_fragment_view, MostPopularSeriesFragment())
             fragmentTransaction.addToBackStack(null)
-
             setupViewSeriesPager(viewPager!!)
-
             fragmentTransaction.replace(R.id.detail_fragment_linearlayout, TopRatedSeriesFragment())
             fragmentTransaction.addToBackStack(null)
             fragmentTransaction.commit()
             setupViewSeriesPager(viewPager!!)
         }
         else{
+            fragment_frame.visibility=View.VISIBLE
             val fragmentTransaction = supportFragmentManager.beginTransaction()
-            fragmentTransaction
-                .replace(R.id.fragment_frame, fragment)
-                .commit()
-
-            setupViewUserListPager(viewPager!!)
+            fragmentTransaction.replace(R.id.fragment_frame, fragment)
+            fragmentTransaction.commit()
         }
     }
 
@@ -226,40 +240,27 @@ var movieNameFilter:EditText?=null
     fun searchButton(view: View){
         val edit = findViewById<View>(R.id.search_edit_text) as EditText
         if(myEventListenerVariable==0) {
-
             val filterButton=findViewById<View>(R.id.filterMovie) as ImageView
             edit.isEnabled = true
             edit.isFocusable = true
-
             filterButton.setVisibility(View.VISIBLE)
             edit.setVisibility(View.VISIBLE);
             myEventListenerVariable++
         }
         else
         {
-
-
             val data = HashMap<String,String>()
-
             if(edit.text.toString()!="") {
-
-
                 data.put("query",edit.text.toString())
                 MovieSearchModel.queriesData=data
-
                 val intent = Intent(this, SearchActivity::class.java)
-                startActivity(intent)
-                }
-            else(
-                    Toast.makeText(this, "Please enter to movie name!", Toast.LENGTH_SHORT).show()
-                    )
+                startActivity(intent)}
+            else
+                (Toast.makeText(this, "Please enter to movie name!", Toast.LENGTH_SHORT).show())
         }
-
     }
 
     fun filterMovie(view: View){
-
-
         val mDialogView = LayoutInflater.from(this).inflate(R.layout.filter_movie, null)
         //AlertDialogBuilder
         val mBuilder = AlertDialog

@@ -7,16 +7,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.nytimesmoviesreview.R
-import com.example.nytimesmoviesreview.adapter.MoviesAdapterGetPopular
 import com.example.nytimesmoviesreview.adapter.UserListsAdapter
-import com.example.nytimesmoviesreview.fragments.MostPopularMoviesFragment
-import com.example.nytimesmoviesreview.model.MovieGetPopularModel
-import com.example.nytimesmoviesreview.utils.TinyDB
-import kotlinx.android.synthetic.main.main_fragment.*
-import kotlinx.android.synthetic.main.now_playing_fragment.*
 import kotlinx.android.synthetic.main.user_list_fragment.*
 
-class UserListFragment :Fragment(){
+class UserFavoriteListFragment :Fragment(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         retainInstance=true
@@ -34,8 +28,8 @@ class UserListFragment :Fragment(){
 
     }
     companion object{
-        fun newInstance(): UserListFragment =
-            UserListFragment()
+        fun newInstance(): UserFavoriteListFragment =
+            UserFavoriteListFragment()
 
     }
 }

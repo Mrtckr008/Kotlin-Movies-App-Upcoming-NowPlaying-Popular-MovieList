@@ -150,11 +150,39 @@ companion object {
     }
 
     fun addWatchedList(view:View){
-
+        val localFeedList = TinyDB(this).getListString("getWatchedMovieList")
+        if(responseMovieDetail!=null){
+            val saveValuePostData = responseMovieDetail
+            val gson = Gson()
+            val saveJsonValue = gson.toJson(saveValuePostData)
+            localFeedList?.add(saveJsonValue)
+            TinyDB(this).putListString("getWatchedMovieList", localFeedList)
+        }
+        else{
+            val saveValuePostData=responseSeriesDetail
+            val gson = Gson()
+            val saveJsonValue = gson.toJson(saveValuePostData)
+            localFeedList?.add(saveJsonValue)
+            TinyDB(this).putListString("getWatchedMovieList", localFeedList)
+        }
     }
 
     fun addWatchList(view:View){
-
+        val localFeedList = TinyDB(this).getListString("getWatchMovieList")
+        if(responseMovieDetail!=null){
+            val saveValuePostData = responseMovieDetail
+            val gson = Gson()
+            val saveJsonValue = gson.toJson(saveValuePostData)
+            localFeedList?.add(saveJsonValue)
+            TinyDB(this).putListString("getWatchMovieList", localFeedList)
+        }
+        else{
+            val saveValuePostData=responseSeriesDetail
+            val gson = Gson()
+            val saveJsonValue = gson.toJson(saveValuePostData)
+            localFeedList?.add(saveJsonValue)
+            TinyDB(this).putListString("getWatchMovieList", localFeedList)
+        }
     }
 
     override fun onBackPressed() {

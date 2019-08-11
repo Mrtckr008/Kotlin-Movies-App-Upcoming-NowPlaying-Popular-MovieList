@@ -7,17 +7,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.nytimesmoviesreview.R
+import com.example.nytimesmoviesreview.adapter.MoviesAdapter
 import com.example.nytimesmoviesreview.adapter.MoviesAdapterGetPopular
 import com.example.nytimesmoviesreview.adapter.UserListsAdapter
-import com.example.nytimesmoviesreview.adapter.UserWatchListAdapter
+import com.example.nytimesmoviesreview.adapter.UserWatchedListAdapter
 import com.example.nytimesmoviesreview.fragments.MostPopularMoviesFragment
 import com.example.nytimesmoviesreview.model.MovieGetPopularModel
+import com.example.nytimesmoviesreview.model.MovieNowPlayingModel
 import com.example.nytimesmoviesreview.utils.TinyDB
 import kotlinx.android.synthetic.main.main_fragment.*
 import kotlinx.android.synthetic.main.now_playing_fragment.*
 import kotlinx.android.synthetic.main.user_list_fragment.*
 
-class UserWatchListFragment :Fragment(){
+class UserWatchedListFragment :Fragment(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         retainInstance=true
@@ -30,13 +32,13 @@ class UserWatchListFragment :Fragment(){
         super.onViewCreated(view, savedInstanceState)
         userListRecyclerView.apply {
             layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
-            adapter = UserWatchListAdapter(context)
+            adapter= UserWatchedListAdapter(context)
         }
 
     }
     companion object{
-        fun newInstance(): UserWatchListFragment =
-            UserWatchListFragment()
+        fun newInstance(): UserWatchedListFragment =
+            UserWatchedListFragment()
 
     }
 }
