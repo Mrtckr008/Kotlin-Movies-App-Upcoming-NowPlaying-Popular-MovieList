@@ -39,6 +39,7 @@ import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.Toast
 import com.example.nytimesmoviesreview.ApiCalls.ApiCall
+import com.example.nytimesmoviesreview.Fragments.UserListFragment
 import com.example.nytimesmoviesreview.dto.*
 import com.example.nytimesmoviesreview.model.MovieNowPlayingModel
 import com.example.nytimesmoviesreview.model.MovieSearchModel
@@ -49,7 +50,7 @@ import kotlinx.android.synthetic.main.toolbar_layout.*
 
 
 class MainActivity : AppCompatActivity(),NavigationView.OnNavigationItemSelectedListener {
-
+    var decision=false
     private var tabLayout: TabLayout? = null
     var viewPager: ViewPager? = null
     private var nav_view: NavigationView? = null
@@ -119,21 +120,22 @@ var movieNameFilter:EditText?=null
             finish()
         }
         if (id == R.id.series_lists) {
+            decision=false
             drawer?.closeDrawers()
             changeFragment(MostPopularSeriesFragment())
+
          //   tabLayout?.setVisibility(GONE)
          //   viewPager?.setVisibility(GONE)
         }
         if(id==R.id.favorite_list){
+            decision=true
             drawer?.closeDrawers()
-
+            changeFragment(UserListFragment())
         }
 
         if (item.itemId == 1) {
             changeFragment(MostPopularMoviesFragment())
             tabLayout?.setVisibility(GONE)
-        } else {
-
         }
         return true
     }
@@ -158,18 +160,36 @@ var movieNameFilter:EditText?=null
         viewPager.adapter = adapter
     }
 
+    private fun setupViewUserListPager(viewPager: ViewPager) {
+        val adapter = ViewPagerAdapter(supportFragmentManager)
+        adapter.addFragment(UserListFragment(), "Favorite List")
+        adapter.addFragment(UserListFragment(), "Watched List")
+        adapter.addFragment(UserListFragment(), "Watch List")
+        viewPager.adapter = adapter
+    }
     fun changeFragment(fragment: Fragment) {
-        val fragmentTransaction = supportFragmentManager.beginTransaction()
 
-        fragmentTransaction.replace(R.id.main_fragment_view, MostPopularSeriesFragment())
-        fragmentTransaction.addToBackStack(null)
 
-        setupViewSeriesPager(viewPager!!)
+        if(!decision) {
+            val fragmentTransaction = supportFragmentManager.beginTransaction()
+            fragmentTransaction.replace(R.id.main_fragment_view, MostPopularSeriesFragment())
+            fragmentTransaction.addToBackStack(null)
 
-        fragmentTransaction.replace(R.id.detail_fragment_linearlayout, TopRatedSeriesFragment())
-        fragmentTransaction.addToBackStack(null)
-        fragmentTransaction.commit()
-        setupViewSeriesPager(viewPager!!)
+            setupViewSeriesPager(viewPager!!)
+
+            fragmentTransaction.replace(R.id.detail_fragment_linearlayout, TopRatedSeriesFragment())
+            fragmentTransaction.addToBackStack(null)
+            fragmentTransaction.commit()
+            setupViewSeriesPager(viewPager!!)
+        }
+        else{
+            val fragmentTransaction = supportFragmentManager.beginTransaction()
+            fragmentTransaction
+                .replace(R.id.fragment_frame, fragment)
+                .commit()
+
+            setupViewUserListPager(viewPager!!)
+        }
     }
 
     fun CallSeriesApis(){

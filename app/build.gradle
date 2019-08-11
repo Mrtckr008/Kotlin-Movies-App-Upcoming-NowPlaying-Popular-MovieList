@@ -48,4 +48,6 @@ dependencies {
 
     implementation 'com.facebook.fresco:fresco:2.0.0'
 
+    implementation 'com.r0adkll:slidableactivity:2.0.6'
+
 }

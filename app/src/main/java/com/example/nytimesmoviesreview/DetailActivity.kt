@@ -12,20 +12,21 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.example.nytimesmoviesreview.ApiCalls.ApiCall
 import kotlinx.android.synthetic.main.activity_detail.*
 import android.content.Intent
+import android.graphics.Color
 import android.net.Uri
 import com.example.nytimesmoviesreview.dto.GetMovieDetail
 import com.example.nytimesmoviesreview.dto.GetSeriesDetail
+import com.example.nytimesmoviesreview.utils.TinyDB
+import com.google.gson.Gson
+import com.r0adkll.slidr.Slidr
+import com.r0adkll.slidr.model.SlidrConfig
+import com.r0adkll.slidr.model.SlidrPosition
 
 
 class DetailActivity : AppCompatActivity() {
 companion object {
     var isItMovie=true
 }
-
-
-
-
-
 
     var responseMovieDetail:GetMovieDetail?=null
     var responseSeriesDetail:GetSeriesDetail?=null
@@ -43,8 +44,28 @@ companion object {
         val movieDate=findViewById<TextView>(R.id.movie_release_date)
         val movieVoteAverage=findViewById<TextView>(R.id.movie_vote_avarage)
 
-            if(isItMovie){
+        val config: SlidrConfig = SlidrConfig.Builder()
+            .position(SlidrPosition.LEFT)
+            .sensitivity(1f)
+            .scrimColor(Color.BLACK)
+            .scrimStartAlpha(0.8f)
+            .scrimEndAlpha(0f)
+            .velocityThreshold(2400f)
+            .distanceThreshold(0.25f)
+            .edge(false)
+            .edgeSize(0.18f).build()
+
+        val slidr= Slidr.attach(this, config)
+        slidr.unlock()
+
+
+
+        if(isItMovie){
+
                 responseMovieDetail=ApiCall().callMovieDetail()
+
+                movie_detail_image.transitionName = "simple_activity_transition${responseMovieDetail!!.id}"
+
                 Glide.with(this).load("https://image.tmdb.org/t/p/w300/"+responseMovieDetail?.posterPath)
                     .thumbnail(Glide.with(this).load(R.drawable.abc_ic_go_search_api_material))
                     .transition(DrawableTransitionOptions.withCrossFade()).into(movie_detail_image)
@@ -67,6 +88,10 @@ companion object {
             }
         else{
                 responseSeriesDetail=ApiCall().callSeriesDetail()
+
+                movie_detail_image.transitionName = "simple_activity_transition${responseSeriesDetail!!.id}"
+
+
                 Glide.with(this).load("https://image.tmdb.org/t/p/w300/"+responseSeriesDetail?.posterPath)
                     .thumbnail(Glide.with(this).load(R.drawable.abc_ic_go_search_api_material))
                     .transition(DrawableTransitionOptions.withCrossFade()).into(movie_detail_image)
@@ -107,7 +132,21 @@ companion object {
     }
 
     fun addFavoriteList(view:View){
-
+        val localFeedList = TinyDB(this).getListString("getMovieList")
+        if(responseMovieDetail!=null){
+        val saveValuePostData = responseMovieDetail
+            val gson = Gson()
+            val saveJsonValue = gson.toJson(saveValuePostData)
+            localFeedList?.add(saveJsonValue)
+            TinyDB(this).putListString("getMovieList", localFeedList)
+        }
+        else{
+            val saveValuePostData=responseSeriesDetail
+            val gson = Gson()
+            val saveJsonValue = gson.toJson(saveValuePostData)
+            localFeedList?.add(saveJsonValue)
+            TinyDB(this).putListString("getMovieList", localFeedList)
+        }
     }
 
     fun addWatchedList(view:View){

@@ -16,7 +16,7 @@ import kotlinx.android.synthetic.main.main_fragment.*
 import kotlinx.android.synthetic.main.now_playing_fragment.*
 import kotlinx.android.synthetic.main.user_list_fragment.*
 
-class UserListFragment :Fragment(){
+class UserWatchListFragment :Fragment(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         retainInstance=true
@@ -34,8 +34,8 @@ class UserListFragment :Fragment(){
 
     }
     companion object{
-        fun newInstance(): UserListFragment =
-            UserListFragment()
+        fun newInstance(): UserWatchListFragment =
+            UserWatchListFragment()
 
     }
 }

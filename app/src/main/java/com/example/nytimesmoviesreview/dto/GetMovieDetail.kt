@@ -57,7 +57,7 @@ class GetMovieDetail {
      var releaseDate: String? = null
     @SerializedName("revenue")
     @Expose
-     var revenue: Int? = null
+     var revenue: Float? = null
     @SerializedName("runtime")
     @Expose
      var runtime: Int? = null

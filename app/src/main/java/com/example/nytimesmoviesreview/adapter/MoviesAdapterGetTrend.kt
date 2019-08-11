@@ -1,7 +1,9 @@
 package com.example.nytimesmoviesreview.adapter
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.support.v4.app.ActivityOptionsCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
@@ -19,6 +21,7 @@ import com.example.nytimesmoviesreview.R
 import com.example.nytimesmoviesreview.dto.Result
 import com.example.nytimesmoviesreview.dto.ResultUpcoming
 import com.example.nytimesmoviesreview.dto.TrendMoviesAndSeriesResult
+import kotlinx.android.synthetic.main.movies_item_list.view.*
 
 
 class MoviesAdapterGetUpcoming(moviesList:List<TrendMoviesAndSeriesResult>,var context:Context):RecyclerView.Adapter<MoviesViewHolderGetUpcoming>() {
@@ -33,15 +36,15 @@ class MoviesAdapterGetUpcoming(moviesList:List<TrendMoviesAndSeriesResult>,var c
         holder.bindTo(moviesList[position])
         holder.itemView.setOnClickListener{
             System.out.println("mcmcClick"+moviesList[position].TrendMoviesAndSeriesid)
-            if(moviesList[position].firstAirDate==null)
-                DetailActivity.isItMovie=true
-            else
-                DetailActivity.isItMovie=false
+            DetailActivity.isItMovie = moviesList[position].firstAirDate==null
             ApiCall.movieId=moviesList[position].TrendMoviesAndSeriesid?.toString()
 
-            val intent = Intent(context, DetailActivity::class.java)
+            val options: ActivityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                context as Activity, it.imgViewImageUrl, "simple_activity_transition${moviesList[position].TrendMoviesAndSeriesid}")
 
-            ContextCompat.startActivity(context, intent, null)
+
+            val intent = Intent(context, DetailActivity::class.java)
+            ContextCompat.startActivity(context, intent, options.toBundle())
         }
     }
 

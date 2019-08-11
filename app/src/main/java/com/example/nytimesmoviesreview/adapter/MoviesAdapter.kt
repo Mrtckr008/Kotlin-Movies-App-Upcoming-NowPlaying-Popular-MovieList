@@ -47,8 +47,13 @@ class MoviesAdapter(moviesList:List<Result>,var context: Context):RecyclerView.A
         System.out.println("mcmcClick"+moviesList[position].id?.toInt())
             DetailActivity.isItMovie=true
             ApiCall.movieId=moviesList[position].id?.toInt().toString()
+
+            val options: ActivityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                context as Activity, it.imgViewImageUrl, "simple_activity_transition${moviesList[position].id?.toInt().toString()}")
+
+
             val intent = Intent(context, DetailActivity::class.java)
-            startActivity(context,intent, null)
+            startActivity(context,intent, options.toBundle())
 return@setOnClickListener
           }
     }

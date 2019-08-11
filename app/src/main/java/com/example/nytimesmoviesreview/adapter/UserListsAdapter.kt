@@ -28,12 +28,17 @@ import android.support.v4.view.ViewCompat.getTransitionName
 import android.support.v4.view.ViewCompat.setTransitionName
 import android.view.View
 import com.example.nytimesmoviesreview.ApiCalls.ApiCall
+import com.example.nytimesmoviesreview.dto.GetTopRatedSeries
+import com.example.nytimesmoviesreview.dto.ResultGetTopRatedSeries
+import com.example.nytimesmoviesreview.utils.TinyDB
+import com.google.gson.Gson
 import kotlinx.android.synthetic.main.movies_item_list.*
 
 
-class UserListsAdapter(moviesList:List<Result>,var context: Context):RecyclerView.Adapter<UserListViewHolder>() {
+class UserListsAdapter(var context: Context):RecyclerView.Adapter<UserListViewHolder>() {
 
-    var moviesList=moviesList
+    var moviesList= TinyDB(context).getListString("getMovieList")
+
     private val layoutManager: LinearLayoutManager? = null
     override fun onCreateViewHolder(parent: ViewGroup, ViewType: Int): UserListViewHolder {
         return UserListViewHolder(parent)
@@ -41,16 +46,40 @@ class UserListsAdapter(moviesList:List<Result>,var context: Context):RecyclerVie
 
 
     override fun onBindViewHolder(holder: UserListViewHolder, position: Int) {
-        holder.bindTo(moviesList[position])
 
-        holder.itemView.setOnClickListener{
-        System.out.println("mcmcClick"+moviesList[position].id?.toInt())
-            DetailActivity.isItMovie=true
-            ApiCall.movieId=moviesList[position].id?.toInt().toString()
-            val intent = Intent(context, DetailActivity::class.java)
-            startActivity(context,intent, null)
-return@setOnClickListener
-          }
+System.out.println("mcmc"+moviesList[position].substring(2,3))
+        if(moviesList[position].substring(2,3)=="a") {
+            val gson = Gson()
+            val feeds: Result = gson.fromJson(moviesList[position], Result::class.java)
+
+
+            holder.bindTo(feeds)
+            holder.itemView.setOnClickListener{
+                val options: ActivityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                    context as Activity, it.imgViewImageUrl, "simple_activity_transition${feeds.id}")
+
+
+                val intent = Intent(context, DetailActivity::class.java)
+                ContextCompat.startActivity(context, intent, options.toBundle())
+            }
+        }
+        else{
+            val gson = Gson()
+            val feeds: ResultGetTopRatedSeries = gson.fromJson(moviesList[position], ResultGetTopRatedSeries::class.java)
+
+            holder.bindToSeries(feeds)
+            holder.itemView.setOnClickListener{
+                val options: ActivityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                    context as Activity, it.imgViewImageUrl, "simple_activity_transition${feeds.id}")
+
+
+                val intent = Intent(context, DetailActivity::class.java)
+                ContextCompat.startActivity(context, intent, options.toBundle())
+            }
+
+        }
+
+
     }
 
     override fun getItemCount(): Int {
@@ -75,6 +104,8 @@ class UserListViewHolder(viewGroup: ViewGroup):RecyclerView.ViewHolder
         Glide.with(itemView.context).load("https://image.tmdb.org/t/p/w300/"+MoviesDto.posterPath)
             .thumbnail(Glide.with(itemView.context).load(R.drawable.abc_ic_go_search_api_material))
             .transition(DrawableTransitionOptions.withCrossFade()).into(imgViewImageUrl)
+
+
         itemView.setOnClickListener{
 
         System.out.println("mcmcClick"+ MoviesDto.id)
@@ -82,6 +113,22 @@ return@setOnClickListener
         }
     }
 
+    fun bindToSeries(MoviesDto: ResultGetTopRatedSeries) {
+        txtDisplayTitle.text = MoviesDto.name
+        txtHeadline.text = "Popularity Point: "+MoviesDto.popularity.toString()
+        txtOpeningDate.text = "Release Date: "+MoviesDto.firstAirDate
+
+        Glide.with(itemView.context).load("https://image.tmdb.org/t/p/w300/"+MoviesDto.posterPath)
+            .thumbnail(Glide.with(itemView.context).load(R.drawable.abc_ic_go_search_api_material))
+            .transition(DrawableTransitionOptions.withCrossFade()).into(imgViewImageUrl)
+
+
+        itemView.setOnClickListener{
+
+            System.out.println("mcmcClick"+ MoviesDto.id)
+            return@setOnClickListener
+        }
+    }
 
 
 }

@@ -4,7 +4,7 @@
                                              xmlns:tools="http://schemas.android.com/tools"
                                              android:layout_width="match_parent"
                                              android:layout_height="match_parent"
->
+                                             android:background="@android:color/white">
 
     <EditText
             android:layout_width="wrap_content"
@@ -29,7 +29,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/adult_checkbox" android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/movie_year_filter" app:layout_constraintStart_toStartOf="@+id/movie_year_filter"
+            app:layout_constraintTop_toBottomOf="@+id/movie_year_filter"
+            app:layout_constraintStart_toStartOf="@+id/movie_year_filter"
     />
     <Button
             android:text="@android:string/search_go"
@@ -38,12 +39,13 @@
             android:id="@+id/search_movie" android:layout_marginTop="8dp"
             app:layout_constraintTop_toBottomOf="@+id/adult_checkbox"
             app:layout_constraintStart_toStartOf="@+id/adult_checkbox" android:background="@color/colorPrimary"
-            />
+    />
     <TextView
             android:text="Search Movie"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textView" android:textSize="24sp" app:layout_constraintStart_toStartOf="@+id/movie_name_filtered"
+            android:id="@+id/textView" android:textSize="24sp"
+            app:layout_constraintStart_toStartOf="@+id/movie_name_filtered"
             android:textColor="@color/colorPrimary" android:layout_marginTop="8dp"
             app:layout_constraintTop_toTopOf="parent"/>
 </android.support.constraint.ConstraintLayout>

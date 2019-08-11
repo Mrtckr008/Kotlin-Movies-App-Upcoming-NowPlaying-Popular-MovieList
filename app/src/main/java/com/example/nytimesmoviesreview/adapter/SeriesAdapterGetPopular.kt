@@ -1,7 +1,9 @@
 package com.example.nytimesmoviesreview.adapter
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.support.v4.app.ActivityOptionsCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
@@ -17,7 +19,7 @@ import com.example.nytimesmoviesreview.ApiCalls.ApiCall
 import com.example.nytimesmoviesreview.DetailActivity
 import com.example.nytimesmoviesreview.R
 import com.example.nytimesmoviesreview.dto.ResultPopularSeries
-
+import kotlinx.android.synthetic.main.movies_item_list.view.*
 
 
 class MoviesAdapterGetPopularSeries(moviesList:List<ResultPopularSeries>,var context:Context):RecyclerView.Adapter<SeriesViewHolderGetUpcoming>() {
@@ -35,10 +37,12 @@ class MoviesAdapterGetPopularSeries(moviesList:List<ResultPopularSeries>,var con
             System.out.println("mcmcClick"+moviesList[position].id)
             DetailActivity.isItMovie=false
             ApiCall.movieId=moviesList[position].id?.toString()
+            val options: ActivityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                context as Activity, it.imgViewImageUrl, "simple_activity_transition${moviesList[position].id}")
+
+
             val intent = Intent(context, DetailActivity::class.java)
-
-            ContextCompat.startActivity(context, intent, null)
-
+            ContextCompat.startActivity(context, intent, options.toBundle())
             return@setOnClickListener
         }
     }
