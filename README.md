@@ -1,11 +1,8 @@
-Now playing movie list
 <br>
-<img src="https://user-images.githubusercontent.com/32914909/60401360-f0d72580-9b88-11e9-8cd0-cff79bfa170a.png" width="320" height="500">
+<img src="https://user-images.githubusercontent.com/32914909/77070171-d08f1580-69fa-11ea-9991-adf43e56d55f.png" width="320" height="500">
 
-Most popular movie list
 <br>
-<img src="https://user-images.githubusercontent.com/32914909/60401368-fb91ba80-9b88-11e9-9a56-cf2a75ef2e61.png" width="320" height="500">
+<img src="https://user-images.githubusercontent.com/32914909/77070179-d4229c80-69fa-11ea-9edb-c970065df99d.png" width="320" height="500">
 
-Upcoming movie list
 <br>
-<img src="https://user-images.githubusercontent.com/32914909/60401373-0b110380-9b89-11e9-90fd-0244c6b28129.png" width="320" height="500">
+<img src="https://user-images.githubusercontent.com/32914909/77070185-d684f680-69fa-11ea-85bf-09609e1ea3c4.png" width="320" height="500">
