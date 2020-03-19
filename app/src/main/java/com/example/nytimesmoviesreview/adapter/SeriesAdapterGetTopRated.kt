@@ -41,6 +41,9 @@ class SeriesAdapterGetTopRatedSeries(moviesList:List<ResultGetTopRatedSeries>,va
 
 
             val intent = Intent(context, DetailActivity::class.java)
+            intent.putExtra("posterpath", "https://image.tmdb.org/t/p/w300/"+seriesList[position].posterPath)
+            intent.putExtra("movieTitle",seriesList[position].name)
+            intent.putExtra("transitionId",seriesList[position].id.toString())
             ContextCompat.startActivity(context, intent, options.toBundle())
             return@setOnClickListener
         }

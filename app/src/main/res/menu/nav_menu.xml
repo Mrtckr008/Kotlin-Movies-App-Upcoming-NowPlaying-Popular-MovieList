@@ -7,17 +7,13 @@
                   android:icon="@drawable/ic_movie_black_24dp"/>
             <item android:title="Series Lists" android:id="@+id/series_lists"
             android:icon="@drawable/ic_tv_black_24dp"/>
-            <item
-                    android:id="@+id/app_bar_switch"
-                    android:title="Bildirimler"
-                    app:showAsAction="always"
-                    app:actionLayout="@layout/switch_item"/>
         </menu>
     </item>
 
-    <item android:title="People">
+    <item android:title="People(Coming Soon)">
         <menu>
-            <item android:title="Artists" android:id="@+id/action_third"/>
+            <item android:title="Artists" android:id="@+id/people_artist" android:icon="@drawable/ic_people_black_24dp"/>
+            <item android:title="Director" android:id="@+id/people_director" android:icon="@drawable/ic_camera_roll_black_24dp"/>
         </menu>
     </item>
 

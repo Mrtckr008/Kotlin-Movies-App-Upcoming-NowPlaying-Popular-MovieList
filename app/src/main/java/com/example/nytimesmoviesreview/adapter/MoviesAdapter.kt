@@ -24,6 +24,7 @@ import kotlinx.android.synthetic.main.activity_splash.view.*
 import kotlinx.android.synthetic.main.movies_item_list.view.*
 import android.support.v4.content.ContextCompat.startActivity
 import android.app.Activity
+import android.support.v4.util.Pair
 import android.support.v4.view.ViewCompat.getTransitionName
 import android.support.v4.view.ViewCompat.setTransitionName
 import android.view.View
@@ -39,29 +40,26 @@ class MoviesAdapter(moviesList:List<Result>,var context: Context):RecyclerView.A
         return MoviesViewHolder(parent)
     }
 
-
     override fun onBindViewHolder(holder: MoviesViewHolder, position: Int) {
         holder.bindTo(moviesList[position])
-
         holder.itemView.setOnClickListener{
-        System.out.println("mcmcClick"+moviesList[position].id?.toInt())
             DetailActivity.isItMovie=true
             ApiCall.movieId=moviesList[position].id?.toInt().toString()
-
             val options: ActivityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                context as Activity, it.imgViewImageUrl, "simple_activity_transition${moviesList[position].id?.toInt().toString()}")
-
-
+                context as Activity, Pair.create(it.imgViewImageUrl,"simple_activity_transition${
+                moviesList[position].id.toString()}"))
             val intent = Intent(context, DetailActivity::class.java)
+            intent.putExtra("posterpath", "https://image.tmdb.org/t/p/w300/"+moviesList[position].posterPath)
+            intent.putExtra("movieTitle",moviesList[position].title)
+            intent.putExtra("transitionId",moviesList[position].id.toString())
             startActivity(context,intent, options.toBundle())
-return@setOnClickListener
+            return@setOnClickListener
           }
     }
 
     override fun getItemCount(): Int {
         return moviesList.size
      }
-    
 
 }
 class MoviesViewHolder(viewGroup: ViewGroup):RecyclerView.ViewHolder
@@ -71,7 +69,6 @@ class MoviesViewHolder(viewGroup: ViewGroup):RecyclerView.ViewHolder
     private val txtOpeningDate by lazy { itemView.findViewById<TextView>(R.id.txtOpeningDate) }
     private val imgViewImageUrl by lazy { itemView.findViewById<ImageView>(R.id.imgViewImageUrl) }
 
-
     fun bindTo(MoviesDto: Result) {
         txtDisplayTitle.text = MoviesDto.title
         txtHeadline.text = "Popularity Point: "+MoviesDto.popularity.toString()
@@ -80,13 +77,5 @@ class MoviesViewHolder(viewGroup: ViewGroup):RecyclerView.ViewHolder
         Glide.with(itemView.context).load("https://image.tmdb.org/t/p/w300/"+MoviesDto.posterPath)
             .thumbnail(Glide.with(itemView.context).load(R.drawable.abc_ic_go_search_api_material))
             .transition(DrawableTransitionOptions.withCrossFade()).into(imgViewImageUrl)
-        itemView.setOnClickListener{
-
-        System.out.println("mcmcClick"+ MoviesDto.id)
-return@setOnClickListener
-        }
     }
-
-
-
 }

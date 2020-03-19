@@ -21,6 +21,6 @@
             android:layout_gravity="start"
             android:fitsSystemWindows="true"
             app:menu="@menu/nav_menu"
-
-            android:background="#FFFFFF"/>
+            android:theme="@style/DrawerArrowStyle"
+            android:background="#FFFFFF" android:visibility="visible"/>
 </android.support.v4.widget.DrawerLayout>

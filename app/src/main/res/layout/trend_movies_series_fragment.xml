@@ -3,18 +3,16 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:orientation="vertical"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="0dp" android:id="@+id/third_fragment_linearlayout">
+        android:layout_height="match_parent" android:id="@+id/third_fragment_linearlayout"
+        android:background="@android:color/white">
     <android.support.v7.widget.RecyclerView
             android:id="@+id/thirdFragmentsRecyclerView"
-            android:layout_width="0dp"
             android:layout_height="wrap_content"
-
-
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            android:layout_width="match_parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"
+    />
 
 </android.support.constraint.ConstraintLayout>

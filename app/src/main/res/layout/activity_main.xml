@@ -2,23 +2,26 @@
 <android.support.constraint.ConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/constraintLayout"
         xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".MainActivity">
 
-<include
-    layout="@layout/toolbar_layout"
-    android:id="@+id/toolbar_include"/>
+    <include
+            layout="@layout/toolbar_layout"
+            android:id="@+id/toolbar_include"/>
 
     <android.support.design.widget.TabLayout
             android:layout_width="0dp"
             app:tabMode="fixed"
+            app:tabIndicatorColor="@android:color/white"
+            app:tabTextColor="@color/colorPrimary"
+            app:tabSelectedTextColor="@color/colorPrimary"
             android:layout_height="wrap_content" app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:id="@+id/tabLayout" app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintTop_toBottomOf="@+id/toolbar_include" android:background="@color/colorPrimary">
+            app:layout_constraintTop_toBottomOf="@+id/toolbar_include" android:background="@color/colorPrimaryDark">
     </android.support.design.widget.TabLayout>
 
     <android.support.v4.view.ViewPager
@@ -27,7 +30,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@+id/tabLayout" app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="32dp"
-            android:layout_marginStart="32dp"/>
+            android:layout_marginStart="32dp" android:background="@color/colorPrimaryDark"/>
 
 
     <FrameLayout

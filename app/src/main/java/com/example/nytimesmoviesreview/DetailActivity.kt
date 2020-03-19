@@ -14,35 +14,69 @@ import kotlinx.android.synthetic.main.activity_detail.*
 import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
+import android.os.AsyncTask
+import android.widget.ProgressBar
 import com.example.nytimesmoviesreview.dto.GetMovieDetail
+import com.example.nytimesmoviesreview.dto.GetPopularSeries
 import com.example.nytimesmoviesreview.dto.GetSeriesDetail
+import com.example.nytimesmoviesreview.dto.GetTopRatedSeries
+import com.example.nytimesmoviesreview.model.SeriesGetPopularModel
+import com.example.nytimesmoviesreview.model.SeriesGetTopRatedModel
+import com.example.nytimesmoviesreview.network.NytimesServiceInterface
+import com.example.nytimesmoviesreview.network.RetrofitClient
 import com.example.nytimesmoviesreview.utils.TinyDB
 import com.google.gson.Gson
 import com.r0adkll.slidr.Slidr
 import com.r0adkll.slidr.model.SlidrConfig
 import com.r0adkll.slidr.model.SlidrPosition
+import org.w3c.dom.Text
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import java.lang.ref.WeakReference
 
 
 class DetailActivity : AppCompatActivity() {
 companion object {
     var isItMovie=true
 }
-
+    var movieDetailCategory:TextView?=null
     var responseMovieDetail:GetMovieDetail?=null
     var responseSeriesDetail:GetSeriesDetail?=null
+
+    var movieDetailOverview:TextView?= null
+    var movieDetailBudget:TextView?=null
+    var movieName:TextView?=null
+    var movieCountry:TextView?=null
+    var movieDate:TextView?=null
+    var movieVoteAverage:TextView?=null
+    var progressBar:ProgressBar?=null
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
-        val movieDetailCategory=findViewById<TextView>(R.id.movie_detail_category)
+        movieDetailCategory=findViewById<TextView>(R.id.movie_detail_category)
+        movieDetailOverview=findViewById<TextView>(R.id.movie_detail_overview)
+        movieDetailBudget=findViewById<TextView>(R.id.movie_detail_budget)
+        movieName=findViewById<TextView>(R.id.movie_name)
+        movieCountry=findViewById<TextView>(R.id.movie_country)
+        movieDate=findViewById<TextView>(R.id.movie_release_date)
+        movieVoteAverage=findViewById<TextView>(R.id.movie_vote_avarage)
+        progressBar=findViewById(R.id.progressBar)
 
-        val movieDetailOverview=findViewById<TextView>(R.id.movie_detail_overview)
-        val movieDetailBudget=findViewById<TextView>(R.id.movie_detail_budget)
-        val movieName=findViewById<TextView>(R.id.movie_name)
-        val movieCountry=findViewById<TextView>(R.id.movie_country)
-        val movieDate=findViewById<TextView>(R.id.movie_release_date)
-        val movieVoteAverage=findViewById<TextView>(R.id.movie_vote_avarage)
+
+        val posterPath:String = intent.getStringExtra("posterpath")
+        val movieTitle:String = intent.getStringExtra("movieTitle")
+        val transitionId:String = intent.getStringExtra("transitionId")
+
+            movie_detail_image.transitionName = "simple_activity_transition$transitionId"
+            Glide.with(this).load(posterPath)
+                .thumbnail(Glide.with(this).load(R.drawable.abc_ic_go_search_api_material))
+                .transition(DrawableTransitionOptions.withCrossFade()).into(movie_detail_image)
+
+            movieName?.text = movieTitle
+
 
         val config: SlidrConfig = SlidrConfig.Builder()
             .position(SlidrPosition.LEFT)
@@ -56,69 +90,11 @@ companion object {
             .edgeSize(0.18f).build()
 
         val slidr= Slidr.attach(this, config)
+        val task =
+            DetailActivity.PostOtherViewPager(this)                                                                    //  Use for download new feeds in background.
+        task.execute(10)
         slidr.unlock()
-
-
-
-        if(isItMovie){
-
-                responseMovieDetail=ApiCall().callMovieDetail()
-
-                movie_detail_image.transitionName = "simple_activity_transition${responseMovieDetail!!.id}"
-
-                Glide.with(this).load("https://image.tmdb.org/t/p/w300/"+responseMovieDetail?.posterPath)
-                    .thumbnail(Glide.with(this).load(R.drawable.abc_ic_go_search_api_material))
-                    .transition(DrawableTransitionOptions.withCrossFade()).into(movie_detail_image)
-
-                movieName.text=responseMovieDetail?.title
-                movieDetailBudget.text="Movie budget: "+responseMovieDetail?.budget.toString()+" $"
-                movieDetailOverview.text=responseMovieDetail?.overview
-                var categoriesList:String?=""
-                for (item in 0..responseMovieDetail?.genres!!.size-1) {
-                    if(item==responseMovieDetail?.genres!!.size-1)
-                        categoriesList += responseMovieDetail?.genres!![item].name
-                    else
-                        categoriesList += responseMovieDetail?.genres!![item].name + "-"
-                }
-                movieDetailCategory.text= "Movie Category: $categoriesList"
-                movieCountry.text="Production Country: "+responseMovieDetail?.productionCountries!![0].name
-                movieDate.text="Release Date: "+responseMovieDetail?.releaseDate
-                movieVoteAverage.text="Vote: "+responseMovieDetail?.voteAverage
-
-            }
-        else{
-                responseSeriesDetail=ApiCall().callSeriesDetail()
-
-                movie_detail_image.transitionName = "simple_activity_transition${responseSeriesDetail!!.id}"
-
-
-                Glide.with(this).load("https://image.tmdb.org/t/p/w300/"+responseSeriesDetail?.posterPath)
-                    .thumbnail(Glide.with(this).load(R.drawable.abc_ic_go_search_api_material))
-                    .transition(DrawableTransitionOptions.withCrossFade()).into(movie_detail_image)
-
-                movieName.text=responseSeriesDetail?.name
-
-                movieDetailOverview.text=responseSeriesDetail?.overview
-                var categoriesList:String?=""
-                for (item in 0..responseSeriesDetail?.genres!!.size-1) {
-                    if(item==responseSeriesDetail?.genres!!.size-1)
-                        categoriesList += responseSeriesDetail?.genres!![item].name
-                    else
-                        categoriesList += responseSeriesDetail?.genres!![item].name + "-"
-                }
-              movieDetailBudget.text="Total Season-Episode: "+responseSeriesDetail?.numberOfSeasons.toString()+"-"+responseSeriesDetail?.numberOfEpisodes.toString()
-                movieDetailCategory.text= "Movie Category: $categoriesList"
-                movieCountry.text="Production Company: "+responseSeriesDetail?.productionCompanies!![0].name
-                movieDate.text="First Release Date: "+responseSeriesDetail?.firstAirDate
-                movieVoteAverage.text="Vote: "+responseSeriesDetail?.voteAverage
-
-
-            }
-
-
     }
-
-
 
     fun goMovieHomePage(view: View){
         if(isItMovie) {
@@ -185,8 +161,79 @@ companion object {
         }
     }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
-        finish()
+
+    class PostOtherViewPager internal constructor(var context: DetailActivity) : AsyncTask<Int, String, String?>() {
+        private var resp: String? = null
+        private val activityReference: WeakReference<DetailActivity> = WeakReference(context)
+        override fun onPreExecute() {
+            System.out.println("MCOnPreExecute")
+            val activity = activityReference.get()
+            if (activity == null || activity.isFinishing) return
+        }
+
+        override fun doInBackground(vararg params: Int?): String? {
+            publishProgress("Calls Started") // Calls onProgressUpdate()
+            try {
+                if(isItMovie){
+                    context.responseMovieDetail=ApiCall().callMovieDetail()
+                }
+                else{
+                    context.responseSeriesDetail=ApiCall().callSeriesDetail()
+                }
+            } catch (e: InterruptedException) {
+                e.printStackTrace()
+                resp = e.message
+            } catch (e: Exception) {
+                e.printStackTrace()
+                resp = e.message
+            }
+            return resp                                                                                                     //Need to find some way for if api has some problem.
+        }
+
+        override fun onPostExecute(result: String?) {
+            if(isItMovie) {
+                context.fav_image.visibility=View.VISIBLE
+                context.watched_image_list.visibility=View.VISIBLE
+                context.watch_image_list.visibility=View.VISIBLE
+                context.progressBar?.visibility=View.GONE
+                context.movieDetailBudget?.text="Movie budget: "+context.responseMovieDetail?.budget.toString()+" $"
+                context.movieDetailOverview?.text=context.responseMovieDetail?.overview
+                var categoriesList:String?=""
+                for (item in 0..context.responseMovieDetail?.genres!!.size-1) {
+                    if(item==context.responseMovieDetail?.genres!!.size-1)
+                        categoriesList += context.responseMovieDetail?.genres!![item].name
+                    else
+                        categoriesList += context.responseMovieDetail?.genres!![item].name + "-"
+                }
+                context.movieDetailCategory?.text= "Movie Category: $categoriesList"
+                context.movieCountry?.text =
+                    "Production Country: " + context.responseMovieDetail?.productionCountries!![0].name
+                context.movieDate?.text = "Release Date: " + context.responseMovieDetail?.releaseDate
+                context.movieVoteAverage?.text = "Vote: " + context.responseMovieDetail?.voteAverage
+
+            }
+            else{
+                context.fav_image.visibility=View.VISIBLE
+                context.watched_image_list.visibility=View.VISIBLE
+                context.watch_image_list.visibility=View.VISIBLE
+                context.progressBar?.visibility=View.GONE
+                context.movieDetailOverview?.text=context.responseSeriesDetail?.overview
+                var categoriesList:String?=""
+                for (item in 0..context.responseSeriesDetail?.genres!!.size-1) {
+                    if(item==context.responseSeriesDetail?.genres!!.size-1)
+                        categoriesList += context.responseSeriesDetail?.genres!![item].name
+                    else
+                        categoriesList += context.responseSeriesDetail?.genres!![item].name + "-"
+                }
+                context.movieDetailBudget?.text="Total Season-Episode: "+context.responseSeriesDetail?.numberOfSeasons.toString()+"-"+context.responseSeriesDetail?.numberOfEpisodes.toString()
+                context.movieDetailCategory?.text= "Movie Category: $categoriesList"
+                context.movieCountry?.text="Production Company: "+context.responseSeriesDetail?.productionCompanies!![0].name
+                context.movieDate?.text="First Release Date: "+context.responseSeriesDetail?.firstAirDate
+                context.movieVoteAverage?.text="Vote: "+context.responseSeriesDetail?.voteAverage
+
+
+            }
+            //When all of pager's first 5 feed download, progressbar is invisible.
+        }
     }
 }

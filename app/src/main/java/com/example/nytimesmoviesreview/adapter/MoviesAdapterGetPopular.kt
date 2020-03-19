@@ -42,6 +42,9 @@ class MoviesAdapterGetPopular(moviesList:List<ResultPopularMovies>,var context:C
 
 
             val intent = Intent(context, DetailActivity::class.java)
+            intent.putExtra("posterpath", "https://image.tmdb.org/t/p/w300/"+moviesList[position].posterPath)
+            intent.putExtra("movieTitle",moviesList[position].title)
+            intent.putExtra("transitionId",moviesList[position].id.toString())
             ContextCompat.startActivity(context, intent, options.toBundle())
         }
     }

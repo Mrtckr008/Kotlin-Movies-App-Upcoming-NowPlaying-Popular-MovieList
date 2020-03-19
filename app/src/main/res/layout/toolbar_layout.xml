@@ -6,31 +6,34 @@
         android:focusable="true"
         android:focusableInTouchMode="true"
         android:layout_height="55dp"
-        android:background="@color/colorPrimary"
+        android:background="@color/colorPrimaryDark"
         android:elevation="10dp">
 
     <android.support.constraint.ConstraintLayout android:layout_width="match_parent"
                                                  android:layout_height="55dp">
-        <ImageView android:layout_width="40dp" android:layout_height="40dp"
+        <ImageView android:layout_width="30dp" android:layout_height="30dp"
                    app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent"
                    app:layout_constraintBottom_toBottomOf="parent"
                    android:onClick="searchButton"
                    app:srcCompat="@drawable/ic_search_black_24dp"
-                   android:id="@+id/search_button"/>
+                   android:id="@+id/search_button" android:layout_marginRight="16dp"
+                   android:tint="@color/colorPrimary"/>
         <EditText
-                android:layout_width="240dp"
-                android:layout_height="55dp"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
                 android:inputType="textPersonName"
-                android:background="@null"
+                android:background="@android:color/white"
                 android:hint="Enter Movie Name"
 
                 android:id="@+id/search_edit_text" android:layout_marginStart="8dp"
-                app:layout_constraintEnd_toStartOf="@+id/search_button" app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/filterMovie" app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintHorizontal_bias="0.6"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1" android:ems="10"
-                style="@android:style/Widget.Material.Light.EditText" android:visibility="gone"/>
+                style="@android:style/Widget.Material.Light.EditText" android:visibility="gone"
+                android:layout_marginEnd="8dp" android:layout_marginTop="8dp" android:layout_marginBottom="8dp"
+                android:paddingLeft="8dp"/>
         <ImageView
                 android:layout_width="40dp"
                 android:layout_height="40dp" app:srcCompat="@drawable/ic_filter_list_black_24dp"

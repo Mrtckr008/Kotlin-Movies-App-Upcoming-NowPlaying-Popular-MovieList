@@ -2,6 +2,7 @@ package com.example.nytimesmoviesreview
 
 import android.content.Context
 import android.content.Intent
+import android.os.AsyncTask
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.widget.NavigationView
@@ -40,6 +41,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.filter_movie.*
 import kotlinx.android.synthetic.main.filter_movie.view.*
 import kotlinx.android.synthetic.main.toolbar_layout.*
+import java.lang.ref.WeakReference
 
 
 class MainActivity : AppCompatActivity(),NavigationView.OnNavigationItemSelectedListener {
@@ -59,8 +61,13 @@ var movieNameFilter:EditText?=null
         StrictMode.setThreadPolicy(policy)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.drawer_layout)
-        CallSeriesApis()
+
+
+        val task = PostOtherViewPager(this)                                                                    //  Use for download new feeds in background.
+        task.execute(10)
+
         fragment = NowPlayingMoviesFragment()
+
 
         //login button click of custom layout
         val v = LayoutInflater.from(this).inflate(R.layout.filter_movie, null)
@@ -90,7 +97,7 @@ var movieNameFilter:EditText?=null
         getSupportActionBar()?.setDisplayShowTitleEnabled(false)    //toolbar texti kaldırma-dynamic olarak biz ekleyebiliriz.
         toggle.syncState()      //toolbar icon çıkması için
 
-
+        fragment_frame.visibility=View.GONE
     //    val mainLayout:ConstraintLayout=findViewById(R.id.constraintLayout)
         val mainFragment: Fragment? = getSupportFragmentManager().findFragmentById(R.id.main_fragment_view)
         val layoutInflater = this.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
@@ -112,7 +119,7 @@ var movieNameFilter:EditText?=null
             startActivity(intent)
             finish()
         }
-        if (id == R.id.series_lists) {
+        else if (id == R.id.series_lists) {
             decision=false
             drawer?.closeDrawers()
             changeFragment(MostPopularSeriesFragment())
@@ -120,7 +127,7 @@ var movieNameFilter:EditText?=null
          //   tabLayout?.setVisibility(GONE)
          //   viewPager?.setVisibility(GONE)
         }
-        if(id==R.id.favorite_list){
+        else if(id==R.id.favorite_list){
 
             toolbar_title.visibility=View.VISIBLE
             toolbar_title.text="Favorite List"
@@ -130,7 +137,7 @@ var movieNameFilter:EditText?=null
             changeFragment(UserFavoriteListFragment())
         }
 
-        if(id==R.id.watched_list){
+        else if(id==R.id.watched_list){
             toolbar_title.text="Watched List"
             tabLayout?.visibility = View.GONE
             toolbar_title.visibility=View.VISIBLE
@@ -139,7 +146,7 @@ var movieNameFilter:EditText?=null
             changeFragment(UserWatchedListFragment())
         }
 
-        if(id==R.id.watch_list){
+        else if(id==R.id.watch_list){
             toolbar_title.text="Watch List"
             tabLayout?.visibility = View.GONE
 
@@ -149,10 +156,8 @@ var movieNameFilter:EditText?=null
             drawer?.closeDrawers()
             changeFragment(UserWatchListFragment())
         }
-
-        if (item.itemId == 1) {
-            changeFragment(MostPopularMoviesFragment())
-            tabLayout?.setVisibility(GONE)
+        else{
+            Toast.makeText(this,"This feature coming soon",Toast.LENGTH_SHORT).show()
         }
         return true
     }
@@ -186,6 +191,12 @@ var movieNameFilter:EditText?=null
     }
     fun changeFragment(fragment: Fragment) {
         if(!decision) {
+            myEventListenerVariable=0
+            val edit = findViewById<View>(R.id.search_edit_text) as EditText
+            val filterButton=findViewById<View>(R.id.filterMovie) as ImageView
+            filterButton.setVisibility(View.GONE)
+            edit.setVisibility(View.GONE);
+            search_button.setVisibility(View.VISIBLE)
             fragment_frame.visibility=View.GONE
             toolbar_title.visibility=View.GONE
             tabLayout?.visibility = View.VISIBLE
@@ -199,6 +210,13 @@ var movieNameFilter:EditText?=null
             setupViewSeriesPager(viewPager!!)
         }
         else{
+            myEventListenerVariable=0
+            val edit = findViewById<View>(R.id.search_edit_text) as EditText
+            val filterButton=findViewById<View>(R.id.filterMovie) as ImageView
+            filterButton.setVisibility(View.GONE)
+            edit.setVisibility(View.GONE);
+            search_button.setVisibility(View.GONE)
+
             fragment_frame.visibility=View.VISIBLE
             val fragmentTransaction = supportFragmentManager.beginTransaction()
             fragmentTransaction.replace(R.id.fragment_frame, fragment)
@@ -206,34 +224,58 @@ var movieNameFilter:EditText?=null
         }
     }
 
-    fun CallSeriesApis(){
-        if(SeriesGetPopularModel.getResponse()==null){
-            val service= RetrofitClient.getClient().create(NytimesServiceInterface::class.java)
-            val callPopularSeries=service.getPopularSeries("tv/popular?api_key=ac3cbd07a68825e9716c144bd088350f&language=en-US&page=1")
 
-            callPopularSeries.enqueue(object : Callback<GetPopularSeries> {
-                override fun onResponse(call: Call<GetPopularSeries>?, response: Response<GetPopularSeries>?) {
-                    val movieList=ArrayList(response!!.body().results)
-                    SeriesGetPopularModel.setResponse(movieList)
-                }
-                override fun onFailure(call: Call<GetPopularSeries>?, t: Throwable?) {
-                }
-            })
+    class PostOtherViewPager internal constructor(var context: MainActivity) : AsyncTask<Int, String, String?>() {
+        private var resp: String? = null
+        private val activityReference: WeakReference<MainActivity> = WeakReference(context)
+        override fun onPreExecute() {
+            System.out.println("MCOnPreExecute")
+            val activity = activityReference.get()
+            if (activity == null || activity.isFinishing) return
         }
 
-        if(SeriesGetTopRatedModel.getResponse()==null){
-            val service= RetrofitClient.getClient().create(NytimesServiceInterface::class.java)
-            val callGetRatedSeries=service.getTopRatedSeries("tv/top_rated?api_key=ac3cbd07a68825e9716c144bd088350f&language=en-US&page=1")
+        override fun doInBackground(vararg params: Int?): String? {
+            publishProgress("Calls Started") // Calls onProgressUpdate()
+            try {
+                if(SeriesGetPopularModel.getResponse()==null){
+                    val service= RetrofitClient.getClient().create(NytimesServiceInterface::class.java)
+                    val callPopularSeries=service.getPopularSeries("tv/popular?api_key=ac3cbd07a68825e9716c144bd088350f&language=en-US&page=1")
 
-            callGetRatedSeries.enqueue(object : Callback<GetTopRatedSeries> {
-                override fun onResponse(call: Call<GetTopRatedSeries>?, response: Response<GetTopRatedSeries>?) {
-                    val movieList=ArrayList(response!!.body().results)
-                    SeriesGetTopRatedModel.setResponse(movieList)
+                    callPopularSeries.enqueue(object : Callback<GetPopularSeries> {
+                        override fun onResponse(call: Call<GetPopularSeries>?, response: Response<GetPopularSeries>?) {
+                            val movieList=ArrayList(response!!.body().results)
+                            SeriesGetPopularModel.setResponse(movieList)
+                        }
+                        override fun onFailure(call: Call<GetPopularSeries>?, t: Throwable?) {
+                        }
+                    })
                 }
-                override fun onFailure(call: Call<GetTopRatedSeries>?, t: Throwable?) {
-                    System.out.println("mcmcmc:")
+
+                if(SeriesGetTopRatedModel.getResponse()==null){
+                    val service= RetrofitClient.getClient().create(NytimesServiceInterface::class.java)
+                    val callGetRatedSeries=service.getTopRatedSeries("tv/top_rated?api_key=ac3cbd07a68825e9716c144bd088350f&language=en-US&page=1")
+
+                    callGetRatedSeries.enqueue(object : Callback<GetTopRatedSeries> {
+                        override fun onResponse(call: Call<GetTopRatedSeries>?, response: Response<GetTopRatedSeries>?) {
+                            val movieList=ArrayList(response!!.body().results)
+                            SeriesGetTopRatedModel.setResponse(movieList)
+                        }
+                        override fun onFailure(call: Call<GetTopRatedSeries>?, t: Throwable?) {
+                            System.out.println("mcmcmc:")
+                        }
+                    })
                 }
-            })
+            } catch (e: InterruptedException) {
+                e.printStackTrace()
+                resp = e.message
+            } catch (e: Exception) {
+                e.printStackTrace()
+                resp = e.message
+            }
+            return resp                                                                                                     //Need to find some way for if api has some problem.
+        }
+        override fun onPostExecute(result: String?) {
+                        //When all of pager's first 5 feed download, progressbar is invisible.
         }
     }
 

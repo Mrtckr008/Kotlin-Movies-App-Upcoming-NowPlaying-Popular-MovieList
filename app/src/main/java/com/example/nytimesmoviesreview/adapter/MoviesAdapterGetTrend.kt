@@ -44,6 +44,12 @@ class MoviesAdapterGetUpcoming(moviesList:List<TrendMoviesAndSeriesResult>,var c
 
 
             val intent = Intent(context, DetailActivity::class.java)
+            intent.putExtra("posterpath", "https://image.tmdb.org/t/p/w300/"+moviesList[position].posterPath)
+            if(moviesList[position].title!=null)
+            intent.putExtra("movieTitle",moviesList[position].title)
+            else
+                intent.putExtra("movieTitle",moviesList[position].name)
+            intent.putExtra("transitionId",moviesList[position].TrendMoviesAndSeriesid.toString())
             ContextCompat.startActivity(context, intent, options.toBundle())
         }
     }

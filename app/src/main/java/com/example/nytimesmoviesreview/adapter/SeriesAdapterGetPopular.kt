@@ -24,34 +24,36 @@ import kotlinx.android.synthetic.main.movies_item_list.view.*
 
 class MoviesAdapterGetPopularSeries(moviesList:List<ResultPopularSeries>,var context:Context):RecyclerView.Adapter<SeriesViewHolderGetUpcoming>() {
 
-    var moviesList=moviesList
+    var seriesList=moviesList
     private val layoutManager: LinearLayoutManager? = null
     override fun onCreateViewHolder(parent: ViewGroup, ViewType: Int): SeriesViewHolderGetUpcoming {
         return SeriesViewHolderGetUpcoming(parent)
     }
 
     override fun onBindViewHolder(holder: SeriesViewHolderGetUpcoming, position: Int) {
-        holder.bindTo(moviesList[position])
+        holder.bindTo(seriesList[position])
 
         holder.itemView.setOnClickListener{
-            System.out.println("mcmcClick"+moviesList[position].id)
             DetailActivity.isItMovie=false
-            ApiCall.movieId=moviesList[position].id?.toString()
+            ApiCall.movieId=seriesList[position].id?.toString()
             val options: ActivityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                context as Activity, it.imgViewImageUrl, "simple_activity_transition${moviesList[position].id}")
+                context as Activity, it.imgViewImageUrl, "simple_activity_transition${seriesList[position].id}")
 
 
             val intent = Intent(context, DetailActivity::class.java)
+            intent.putExtra("posterpath", "https://image.tmdb.org/t/p/w300/"+seriesList[position].posterPath)
+            intent.putExtra("movieTitle",seriesList[position].name)
+            intent.putExtra("transitionId",seriesList[position].id.toString())
             ContextCompat.startActivity(context, intent, options.toBundle())
             return@setOnClickListener
         }
     }
 
     override fun getItemCount(): Int {
-        return moviesList.size
+        return seriesList.size
      }
     fun setMovieList(moviesList: List<ResultPopularSeries>){
-        this.moviesList=moviesList
+        this.seriesList=moviesList
     }
 }
 
